@@ -1046,7 +1046,7 @@ function App() {
                       <div className="flex-1">
                         <div className="flex items-center gap-3 mb-3">
                           <h3 className="text-xl md:text-2xl font-bold group-hover:text-blue-500 transition-colors" itemProp="name">
-                            <a href="https://www.align-a.com/about" target="_blank" rel="noopener noreferrer" className="hover:underline">Aligna</a>
+                            <a href="https://www.align-a.com/" target="_blank" rel="noopener noreferrer" className="hover:underline">Aligna</a>
                           </h3>
                           <Badge variant="outline" className="border-blue-500/50 text-blue-600 bg-blue-500/10 text-xs" itemProp="applicationCategory">SaaS Platform</Badge>
                         </div>
@@ -1085,7 +1085,7 @@ function App() {
                         </div>
                       </div>
                       <nav className="flex flex-row gap-2" aria-label="Project links">
-                        <a href="https://www.align-a.com/about" target="_blank" rel="noopener noreferrer" className="flex-shrink-0 min-h-[44px] min-w-[44px] p-3 rounded-xl bg-muted/80 hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center group/btn hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5" aria-label="View Aligna project website" itemProp="url">
+                        <a href="https://www.align-a.com/" target="_blank" rel="noopener noreferrer" className="flex-shrink-0 min-h-[44px] min-w-[44px] p-3 rounded-xl bg-muted/80 hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center group/btn hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5" aria-label="View Aligna project website" itemProp="url">
                           <Link className="h-5 w-5 group-hover/btn:scale-110 transition-transform" />
                         </a>
                       </nav>

@@ -94,7 +94,7 @@ const commands: Record<string, string[]> = {
     "   32K+ LOC, 1,403 tests, 100% pass rate",
     "   Tech: Python, MCP, AI Orchestration",
     "",
-    "3. Aligna (www.align-a.com/about)",
+    "3. Aligna (www.align-a.com)",
     "   Conversational AI Recruiter",
     "   Voice interviews via LiveKit",
     "   Tech: Next.js, Azure OpenAI, Docker",

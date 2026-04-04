@@ -60,7 +60,7 @@ export const projects: Record<string, Project> = {
     ],
     status: "live",
     links: {
-      website: "https://www.align-a.com/about"
+      website: "https://www.align-a.com/"
     },
     impact: "Helps startups cut hiring time with AI interviews",
     category: "saas",

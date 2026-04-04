@@ -57,7 +57,7 @@ const projects: Record<string, {
     ],
     status: "live",
     links: {
-      website: "https://www.align-a.com/about"
+      website: "https://www.align-a.com/"
     },
     impact: "Helps startups cut hiring time with AI interviews",
     category: "saas"
@@ -155,7 +155,7 @@ FEATURED PROJECTS
    AI-native MCP server for financial data aggregation
    32K+ LOC | 1,403 tests | 100% pass rate
 
-3. Aligna (www.align-a.com/about)
+3. Aligna (www.align-a.com)
    Status: Live
    Stack: Next.js, LiveKit, Azure OpenAI
    Conversational AI recruiter with voice interviews
