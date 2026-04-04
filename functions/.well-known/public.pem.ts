@@ -8,7 +8,7 @@
 
 // Static Ed25519 public key (generated from mcp-private.pem)
 const PUBLIC_KEY_PEM = `-----BEGIN PUBLIC KEY-----
-MCowBQYDK2VwAyEAisxdjnJiLr7ZDuT+ITJ/DhiC7fNldRnoqwxiuo8gxmg=
+MCowBQYDK2VwAyEAxRIrPaJ2/ZcqJIvdTVwdFAybjvZ2G4YbesOKUsEpX3A=
 -----END PUBLIC KEY-----
 `;
 
