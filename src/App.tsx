@@ -32,6 +32,7 @@ import { SkipLinks, useA11y } from "@/components/A11yProvider"
 import { TextScramble } from "@/components/TextScramble"
 import { AnimatedName } from "@/components/AnimatedName"
 import { GradientFlowText, ElasticText } from "@/components/KineticTypography"
+import { MagneticButton } from "@/components/MagneticButton"
 
 // Easter egg - deferred load (not needed for initial interaction)
 const EasterEgg = lazy(() => 
