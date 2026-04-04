@@ -27,12 +27,9 @@ import { ScrollReveal, ScrollRevealContainer } from "@/components/ScrollReveal"
 import { OnboardingChoice } from "@/components/OnboardingChoice"
 
 // Decorative components lazy-loaded (not critical for initial render)
-const CustomCursor = lazy(() => import("@/components/CustomCursor").then(m => ({ default: m.CustomCursor })))
 const KeyboardHelp = lazy(() => import("@/components/KeyboardHelp").then(m => ({ default: m.KeyboardHelp })))
-const MorphingBlob = lazy(() => import("@/components/MorphingBlob").then(m => ({ default: m.BlobBackground })))
 import { SkipLinks, useA11y } from "@/components/A11yProvider"
 import { TextScramble } from "@/components/TextScramble"
-import { MagneticButton } from "@/components/MagneticButton"
 import { AnimatedName } from "@/components/AnimatedName"
 import { GradientFlowText, ElasticText } from "@/components/KineticTypography"
 
@@ -525,15 +522,7 @@ function App() {
         <OnboardingChoice onChoice={handleOnboardingChoice} />
       ) : (
         /* Main content - only renders after onboarding is complete */
-        <div ref={mainRef} className="min-h-screen bg-background cursor-none section-swipe-container">
-      {/* Morphing blob background - subtle ambient effect */}
-      <Suspense fallback={null}>
-        <MorphingBlob variant="subtle" />
-      </Suspense>
-      
-      <Suspense fallback={null}>
-        <CustomCursor />
-      </Suspense>
+        <div ref={mainRef} className="min-h-screen bg-background section-swipe-container">
       
       {/* Swipe Hint Overlay - shows on first mobile visit, tap anywhere to dismiss */}
       {swipeHint && (
@@ -582,7 +571,7 @@ function App() {
           }}
         >
           {/* Gradient fill */}
-          <div className="absolute inset-0 bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] animate-gradient-x" />
+          <div className="absolute inset-0 bg-primary" />
           
           {/* Glow effect at the leading edge - contained within parent */}
           <div 
@@ -621,12 +610,11 @@ function App() {
         } ${prefersReducedMotion ? '!transition-none' : ''}`}
         aria-label="Main navigation"
       >
-        {/* Animated gradient border bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-accent/20 to-transparent animate-[gradient-x_4s_ease_infinite]" style={{ animationDelay: '-2s' }} />
+        {/* Bottom border */}
+        <div className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-border/50 to-transparent" />
         
-        {/* Enhanced Glassmorphism background - more opaque to work over dark sections */}
-        <div className="absolute inset-0 bg-background/95 backdrop-blur-xl shadow-lg shadow-black/[0.03] dark:bg-background/90 dark:shadow-black/10" />
+        {/* Solid background - no backdrop-blur for performance */}
+        <div className="absolute inset-0 bg-background shadow-sm" />
         
         <div className="max-w-5xl mx-auto px-6 py-4 relative z-10">
           <div className="flex items-center justify-between gap-2">
@@ -655,13 +643,11 @@ function App() {
                       className={`min-h-[44px] px-3.5 py-2 text-sm font-medium rounded-xl transition-all duration-300 whitespace-nowrap relative overflow-hidden group ${
                         activeSection === item.id
                           ? "bg-gradient-to-r from-primary to-primary/90 text-primary-foreground shadow-lg shadow-primary/25"
-                          : "text-muted-foreground hover:text-foreground hover:bg-muted/60 hover:backdrop-blur-sm"
+                          : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
                       }`}
                       aria-current={activeSection === item.id ? "page" : undefined}
                     >
-                      {/* Hover shine effect */}
-                      <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                      <span className="relative">{item.label}</span>
+                      {item.label}
                     </button>
                   ))}
                 </div>
@@ -773,9 +759,8 @@ function App() {
             <div className="flex-1 text-center md:text-left">
               {/* Live Status - Enhanced pulsing button with sub-line */}
               <div className="flex flex-col items-center md:items-start gap-1 mb-4">
-                <a href="#contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 hover:scale-105 transition-all duration-300 cursor-pointer group shadow-lg shadow-green-500/10 animate-pulse-slow">
+                <a href="#contact" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-green-500/10 border border-green-500/30 hover:bg-green-500/20 transition-colors duration-300 cursor-pointer group">
                   <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
                   </span>
                   <span className="text-sm font-semibold text-green-600 dark:text-green-400">
@@ -857,34 +842,28 @@ function App() {
               
               {/* Contact & Socials - Personalized CTAs with glow effects */}
               <div className="flex flex-wrap items-center justify-center md:justify-start gap-3">
-                <MagneticButton
-                  strength={0.3}
-                  radius={120}
+                <button
                   className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-accent text-primary-foreground rounded-xl hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5 transition-all duration-300 text-sm font-semibold group"
                   onClick={() => window.open("https://calendly.com/kiarasha-alum/30min", "_blank")}
                 >
-                  <Mail className="h-[18px] w-[18px] group-hover:scale-110 transition-transform" />
+                  <Mail className="h-[18px] w-[18px]" />
                   <span>Book a Free AI Chat</span>
-                  <ArrowUpRight className="h-3.5 w-3.5 opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
-                </MagneticButton>
-                <MagneticButton 
-                  strength={0.25}
-                  radius={100}
+                  <ArrowUpRight className="h-3.5 w-3.5 opacity-70" />
+                </button>
+                <button
                   className="flex items-center gap-2 px-4 py-2.5 bg-muted/80 hover:bg-muted rounded-xl transition-all duration-300 text-sm font-medium group hover:shadow-lg hover:-translate-y-0.5 border border-border/50"
                   onClick={(e) => { e.preventDefault(); scrollToSection('projects'); }}
                 >
                   <span>🎯</span>
                   <span>See My Work</span>
-                </MagneticButton>
-                <MagneticButton 
-                  strength={0.25}
-                  radius={100}
+                </button>
+                <button
                   className="flex items-center gap-2 px-4 py-2.5 bg-muted/80 hover:bg-muted rounded-xl transition-all duration-300 text-sm font-medium group hover:shadow-lg hover:-translate-y-0.5 border border-border/50"
                   onClick={() => window.open("https://www.linkedin.com/in/kiarashadl/", "_blank")}
                 >
-                  <Linkedin className="h-[18px] w-[18px] text-primary group-hover:scale-110 transition-transform" />
+                  <Linkedin className="h-[18px] w-[18px] text-primary" />
                   <span>Connect</span>
-                </MagneticButton>
+                </button>
               </div>
             </div>
           </div>
@@ -933,7 +912,7 @@ function App() {
                   {/* Gradient glow on hover */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-accent to-primary rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
                   
-                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-primary/40 bg-card/80 backdrop-blur-sm overflow-hidden">
+                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-primary/40 bg-card overflow-hidden">
                     {/* Decorative corner accent */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
                     
@@ -997,7 +976,7 @@ function App() {
                   {/* Gradient glow on hover */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
                   
-                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-blue-500/40 bg-card/80 backdrop-blur-sm overflow-hidden">
+                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-blue-500/40 bg-card overflow-hidden">
                     {/* Decorative corner accent */}
                     <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-500/10 to-transparent rounded-bl-full" />
                     
@@ -1392,7 +1371,7 @@ function App() {
                   {/* Gradient glow effect - reduced blur for performance */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-3xl opacity-0 group-hover:opacity-100 blur-md transition-all duration-500" />
                   
-                  <Card className="relative p-8 bg-card/90 backdrop-blur-sm border-border/50">
+                  <Card className="relative p-8 bg-card border-border/50">
                     <div className="flex items-center gap-3 mb-6">
                       <div className="p-2 bg-gradient-to-br from-primary/20 to-accent/10 rounded-xl">
                         <Send className="h-5 w-5 text-primary" />
@@ -1511,14 +1490,14 @@ function App() {
             
             {/* Social Links */}
             <div className="flex items-center gap-4">
-              <a href="https://www.linkedin.com/in/kiarashadl/" target="_blank" rel="noopener noreferrer" className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl bg-muted/50 backdrop-blur-sm border border-border/30 hover:bg-primary hover:text-primary-foreground hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-1 hover:scale-105 active:scale-95 group" aria-label="Visit Kiarash's LinkedIn profile">
-                <Linkedin className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
+              <a href="https://www.linkedin.com/in/kiarashadl/" target="_blank" rel="noopener noreferrer" className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl bg-muted/50 border border-border/30 hover:bg-primary hover:text-primary-foreground hover:border-primary/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group" aria-label="Visit Kiarash's LinkedIn profile">
+                <Linkedin className="h-5 w-5" />
               </a>
-              <a href="https://github.com/kiarashplusplus/" target="_blank" rel="noopener noreferrer" className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl bg-muted/50 backdrop-blur-sm border border-border/30 hover:bg-foreground hover:text-background hover:border-foreground/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-105 active:scale-95 group" aria-label="Visit Kiarash's GitHub profile">
-                <Github className="h-5 w-5 group-hover:scale-110 group-hover:rotate-12 transition-all duration-300" />
+              <a href="https://github.com/kiarashplusplus/" target="_blank" rel="noopener noreferrer" className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl bg-muted/50 border border-border/30 hover:bg-foreground hover:text-background hover:border-foreground/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group" aria-label="Visit Kiarash's GitHub profile">
+                <Github className="h-5 w-5" />
               </a>
-              <a href="mailto:kiarasha@alum.mit.edu" className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl bg-muted/50 backdrop-blur-sm border border-border/30 hover:bg-accent hover:text-accent-foreground hover:border-accent/50 transition-all duration-300 hover:shadow-xl hover:shadow-accent/25 hover:-translate-y-1 hover:scale-105 active:scale-95 group" aria-label="Email Kiarash">
-                <Mail className="h-5 w-5 group-hover:scale-110 transition-transform duration-300" />
+              <a href="mailto:kiarasha@alum.mit.edu" className="min-h-[48px] min-w-[48px] flex items-center justify-center rounded-xl bg-muted/50 border border-border/30 hover:bg-accent hover:text-accent-foreground hover:border-accent/50 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group" aria-label="Email Kiarash">
+                <Mail className="h-5 w-5" />
               </a>
             </div>
             
@@ -1554,12 +1533,10 @@ function App() {
       {showScrollTop && (
         <button
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 min-h-[52px] min-w-[52px] p-3 bg-gradient-to-br from-primary via-primary to-accent text-primary-foreground rounded-2xl shadow-xl shadow-primary/30 hover:shadow-2xl hover:shadow-primary/40 hover:scale-110 hover:-translate-y-1 active:scale-95 transition-all duration-300 z-40 animate-in fade-in zoom-in group backdrop-blur-sm border border-white/10"
+          className="fixed bottom-8 right-8 min-h-[52px] min-w-[52px] p-3 bg-primary text-primary-foreground rounded-2xl shadow-xl hover:shadow-2xl hover:scale-110 hover:-translate-y-1 active:scale-95 transition-all duration-300 z-40 animate-in fade-in zoom-in group"
           aria-label="Scroll to top"
         >
-          {/* Animated glow ring */}
-          <span className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary to-accent opacity-50 blur-lg group-hover:opacity-75 transition-opacity" />
-          <ChevronUpIcon className="h-6 w-6 relative z-10 group-hover:-translate-y-1 transition-transform duration-300" />
+          <ChevronUpIcon className="h-6 w-6 relative z-10" />
         </button>
       )}
 
