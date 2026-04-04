@@ -908,6 +908,68 @@ function App() {
             
             <div className="space-y-6" role="list" aria-label="Featured projects">
               <ScrollReveal className="scroll-reveal-child">
+                <article className="group relative project" itemScope itemType="https://schema.org/MobileApplication">
+                  {/* Gradient glow on hover */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
+                  
+                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-emerald-500/40 bg-card overflow-hidden">
+                    {/* Decorative corner accent */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-emerald-500/10 to-transparent rounded-bl-full" />
+                    
+                    <div className="flex flex-col md:flex-row md:items-start gap-6 relative z-10">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h3 className="text-xl md:text-2xl font-bold group-hover:text-emerald-500 transition-colors" itemProp="name">
+                            <a href="https://trybayan.com" target="_blank" rel="noopener noreferrer" className="hover:underline">Bayan</a>
+                          </h3>
+                          <Badge variant="outline" className="border-emerald-500/50 text-emerald-600 bg-emerald-500/10 text-xs" itemProp="applicationCategory">iOS App</Badge>
+                          <Badge variant="outline" className="border-amber-500/50 text-amber-600 bg-amber-500/10 text-xs">Live</Badge>
+                        </div>
+                        <p className="text-foreground/80 mb-4 leading-relaxed" itemProp="description">
+                          The only app providing bilingual Farsi-English literary analysis of classical Persian poetry, decoding Sufi symbolism, historical allusions, and archaic vocabulary. Fully offline, with verse text from a verified canonical corpus.
+                        </p>
+                        <ul className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4" role="list" aria-label="Project metrics">
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-emerald-500/30 transition-colors">
+                            <div className="text-xl font-bold text-emerald-500">13,828</div>
+                            <div className="text-xs text-muted-foreground">Poems</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-emerald-500/30 transition-colors">
+                            <div className="text-xl font-bold text-emerald-500">33,640</div>
+                            <div className="text-xs text-muted-foreground">Dictionary Entries</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-emerald-500/30 transition-colors">
+                            <div className="text-xl font-bold text-emerald-500">106,037</div>
+                            <div className="text-xs text-muted-foreground">Searchable Verses</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-emerald-500/30 transition-colors">
+                            <div className="text-xl font-bold text-emerald-500">128+</div>
+                            <div className="text-xs text-muted-foreground">Test Functions</div>
+                          </li>
+                        </ul>
+                        <ul className="flex flex-wrap gap-1.5 mb-3" role="list" aria-label="Technologies used">
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Swift</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">SwiftUI</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">CoreData</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">NLP</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">iOS</Badge></li>
+                        </ul>
+                        {/* Impact */}
+                        <div className="flex items-center gap-2 p-2 rounded-lg bg-emerald-500/5 border border-emerald-500/20 text-xs">
+                          <span className="text-emerald-500" aria-hidden="true">✓</span>
+                          <span className="text-muted-foreground"><strong className="font-medium text-foreground">Impact:</strong> Only bilingual Farsi-English Persian poetry analysis app with verified canonical corpus</span>
+                        </div>
+                      </div>
+                      <nav className="flex flex-row gap-2" aria-label="Project links">
+                        <a href="https://trybayan.com" target="_blank" rel="noopener noreferrer" className="flex-shrink-0 min-h-[44px] min-w-[44px] p-3 rounded-xl bg-muted/80 hover:bg-emerald-500 hover:text-white transition-all duration-300 flex items-center justify-center group/btn hover:shadow-lg hover:shadow-emerald-500/20 hover:-translate-y-0.5" aria-label="Visit Bayan website at trybayan.com" itemProp="url">
+                          <Link className="h-5 w-5 group-hover/btn:scale-110 transition-transform" />
+                        </a>
+                      </nav>
+                    </div>
+                  </Card>
+                </article>
+              </ScrollReveal>
+
+              <ScrollReveal className="scroll-reveal-child">
                 <article className="group relative project" itemScope itemType="https://schema.org/SoftwareSourceCode">
                   {/* Gradient glow on hover */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-primary via-accent to-primary rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />

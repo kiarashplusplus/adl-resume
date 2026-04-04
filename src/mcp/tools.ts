@@ -32,7 +32,7 @@ export interface MCPTool {
 export const getProjectDetailsSchema = z.object({
   projectId: z
     .string()
-    .describe("The project ID to retrieve (e.g., 'fiml', 'aligna', 'aivision')"),
+    .describe("The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision')"),
   includeStack: z
     .boolean()
     .optional()
@@ -90,17 +90,22 @@ AI/ML:
 
   projects: `Featured Projects:
 
-1. Financial Intelligence Meta-Layer (FIML)
+1. Bayan (trybayan.com)
+   - Bilingual Farsi-English Persian poetry analysis
+   - 13,828 poems | 33,640 dictionary entries | 106,037 verses
+   - Tech: Swift, SwiftUI, CoreData, NLP
+
+2. Financial Intelligence Meta-Layer (FIML)
    - AI-native MCP server
    - 32K+ LOC | 1,403 tests | 100% pass rate
    - Tech: Python, MCP, AI Orchestration
 
-2. Aligna (www.align-a.com/about)
+3. Aligna (www.align-a.com/about)
    - Conversational AI Recruiter
    - Voice interviews via LiveKit
    - Tech: Next.js, Azure OpenAI, Docker
 
-3. AI Vision
+4. AI Vision
    - Patent-pending AI solutions for home services
    - Status: App Store Live`,
 
@@ -307,8 +312,8 @@ const jsonSchemas: Record<string, object> = {
     properties: {
       projectId: {
         type: "string",
-        description: "The project ID to retrieve (e.g., 'fiml', 'aligna', 'aivision')",
-        enum: ["fiml", "aligna", "aivision"]
+        description: "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision')",
+        enum: ["bayan", "fiml", "aligna", "aivision"]
       },
       includeStack: {
         type: "boolean",

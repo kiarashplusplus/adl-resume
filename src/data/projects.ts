@@ -65,6 +65,26 @@ export const projects: Record<string, Project> = {
     impact: "Helps startups cut hiring time with AI interviews",
     category: "saas",
   },
+  bayan: {
+    id: "bayan",
+    title: "Bayan",
+    description:
+      "The only app providing bilingual Farsi-English literary analysis of classical Persian poetry, decoding Sufi symbolism, historical allusions, and archaic vocabulary. Fully offline with verse text sourced from a verified canonical corpus rather than AI-generated.",
+    shortDescription: "Bilingual Farsi-English classical Persian poetry analysis",
+    stack: ["Swift", "SwiftUI", "CoreData", "NLP", "iOS"],
+    metrics: [
+      { label: "Poems", value: "13,828" },
+      { label: "Dictionary Entries", value: "33,640" },
+      { label: "Searchable Verses", value: "106,037" },
+      { label: "Test Functions", value: "128+" },
+    ],
+    status: "live",
+    links: {
+      website: "https://trybayan.com",
+    },
+    impact: "Only bilingual Farsi-English Persian poetry analysis app with verified canonical corpus",
+    category: "ai",
+  },
   aivision: {
     id: "aivision",
     title: "AI Vision",

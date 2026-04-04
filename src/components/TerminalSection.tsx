@@ -84,12 +84,17 @@ const commands: Record<string, string[]> = {
   projects: [
     "Featured Projects",
     "",
-    "1. Financial Intelligence Meta-Layer (FIML)",
+    "1. Bayan (trybayan.com)",
+    "   Bilingual Farsi-English Persian poetry analysis",
+    "   13,828 poems | 33,640 dictionary entries | 106,037 verses",
+    "   Tech: Swift, SwiftUI, CoreData, NLP",
+    "",
+    "2. Financial Intelligence Meta-Layer (FIML)",
     "   AI-native MCP server",
     "   32K+ LOC, 1,403 tests, 100% pass rate",
     "   Tech: Python, MCP, AI Orchestration",
     "",
-    "2. Aligna (www.align-a.com/about)",
+    "3. Aligna (www.align-a.com/about)",
     "   Conversational AI Recruiter",
     "   Voice interviews via LiveKit",
     "   Tech: Next.js, Azure OpenAI, Docker",
@@ -98,6 +103,11 @@ const commands: Record<string, string[]> = {
   ],
   "projects --latest": [
     "Current Focus (2024-2025)",
+    "",
+    "Bayan iOS App (trybayan.com)",
+    "  Bilingual Farsi-English Persian poetry analysis",
+    "  13,828 poems across 12 poets, 20 collections",
+    "  Status: Live",
     "",
     "AI Vision (Founder & CEO)",
     "  Patent-pending AI and computer vision",
@@ -624,6 +634,7 @@ function TerminalSEOContent() {
       <section aria-label="Featured Projects">
         <h3>Projects</h3>
         <ul role="list">
+          <li>Bayan (trybayan.com): Bilingual Farsi-English classical Persian poetry analysis. 13,828 poems, 33,640 dictionary entries, 106,037 searchable verses. Tech: Swift, SwiftUI, CoreData, NLP.</li>
           <li>Financial Intelligence Meta-Layer (FIML): AI-native MCP server, 32K+ LOC, 1,403 tests, 100% pass rate. Tech: Python, MCP, AI Orchestration.</li>
           <li>Aligna (align-a.com): Conversational AI Recruiter with voice interviews via LiveKit. Tech: Next.js, Azure OpenAI, Docker.</li>
         </ul>
@@ -727,7 +738,7 @@ function DesktopTerminal() {
           "  POST https://25x.codes/mcp/invoke",
           "",
           "Available Tools:",
-          "  • get_project_details  Get project info (fiml, aligna, aivision)",
+          "  • get_project_details  Get project info (bayan, fiml, aligna, aivision)",
           "  • run_terminal_command Run: about, skills, projects, contact, experience",
           "",
           "Example:",

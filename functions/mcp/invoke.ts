@@ -62,6 +62,25 @@ const projects: Record<string, {
     impact: "Helps startups cut hiring time with AI interviews",
     category: "saas"
   },
+  bayan: {
+    id: "bayan",
+    title: "Bayan",
+    description: "The only app providing bilingual Farsi-English literary analysis of classical Persian poetry, decoding Sufi symbolism, historical allusions, and archaic vocabulary. Fully offline with verse text sourced from a verified canonical corpus rather than AI-generated.",
+    shortDescription: "Bilingual Farsi-English classical Persian poetry analysis",
+    stack: ["Swift", "SwiftUI", "CoreData", "NLP", "iOS"],
+    metrics: [
+      { label: "Poems", value: "13,828" },
+      { label: "Dictionary Entries", value: "33,640" },
+      { label: "Searchable Verses", value: "106,037" },
+      { label: "Test Functions", value: "128+" }
+    ],
+    status: "live",
+    links: {
+      website: "https://trybayan.com"
+    },
+    impact: "Only bilingual Farsi-English Persian poetry analysis app with verified canonical corpus",
+    category: "ai"
+  },
   aivision: {
     id: "aivision",
     title: "AI Vision",
@@ -124,19 +143,25 @@ Cloud & DevOps
   projects: `
 FEATURED PROJECTS
 
-1. FIML - Financial Intelligence Meta-Layer
+1. Bayan (trybayan.com)
+   Status: Live
+   Stack: Swift, SwiftUI, CoreData, NLP, iOS
+   Bilingual Farsi-English classical Persian poetry analysis
+   13,828 poems | 33,640 dictionary entries | 106,037 verses
+
+2. FIML - Financial Intelligence Meta-Layer
    Status: Development
    Stack: Python, MCP Server, AI Orchestration
    AI-native MCP server for financial data aggregation
    32K+ LOC | 1,403 tests | 100% pass rate
 
-2. Aligna (www.align-a.com/about)
+3. Aligna (www.align-a.com/about)
    Status: Live
    Stack: Next.js, LiveKit, Azure OpenAI
    Conversational AI recruiter with voice interviews
    Helps startups cut hiring time
 
-3. AI Vision
+4. AI Vision
    Status: Live
    Stack: Computer Vision, iOS, ML
    Patent-pending AI solutions for home services
@@ -405,7 +430,7 @@ const toolDefinitions: Record<string, { description: string; inputSchema: object
         projectId: {
           type: "string",
           description: "The project ID to retrieve",
-          enum: ["fiml", "aligna", "aivision"]
+          enum: ["bayan", "fiml", "aligna", "aivision"]
         },
         includeStack: {
           type: "boolean",
@@ -517,6 +542,7 @@ export const onRequest = async (context: { request: Request; env: Env }): Promis
           get_contact: "/mcp/invoke?command=contact",
           get_resume: "/mcp/invoke?command=resume",
           get_experience: "/mcp/invoke?command=experience",
+          get_project_bayan: "/mcp/invoke?projectId=bayan",
           get_project_fiml: "/mcp/invoke?projectId=fiml",
           get_project_aligna: "/mcp/invoke?projectId=aligna",
           get_project_aivision: "/mcp/invoke?projectId=aivision"
