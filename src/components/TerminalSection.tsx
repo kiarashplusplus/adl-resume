@@ -99,6 +99,11 @@ const commands: Record<string, string[]> = {
     "   Voice interviews via LiveKit",
     "   Tech: Next.js, Azure OpenAI, Docker",
     "",
+    "4. Undisk MCP (mcp.undisk.app)",
+    "   Undo-first versioned file workspace for AI agents",
+    "   25 MCP tools | <50ms restore | immutable writes",
+    "   Tech: MCP, Cloudflare Workers, Durable Objects",
+    "",
     "Tip: Try 'projects --latest' for current work"
   ],
   "projects --latest": [
@@ -116,7 +121,11 @@ const commands: Record<string, string[]> = {
     "",
     "FIML Open Source",
     "  Phase 2 development in progress",
-    "  Progress: 60% - Active Development"
+    "  Progress: 60% - Active Development",
+    "",
+    "Undisk MCP (mcp.undisk.app)",
+    "  Undo-first file memory for AI agents",
+    "  Status: Live"
   ],
   contact: [
     "Contact Information",
@@ -637,6 +646,7 @@ function TerminalSEOContent() {
           <li>Bayan (trybayan.com): Bilingual Farsi-English classical Persian poetry analysis. 13,828 poems, 33,640 dictionary entries, 106,037 searchable verses. Tech: Swift, SwiftUI, CoreData, NLP.</li>
           <li>Financial Intelligence Meta-Layer (FIML): AI-native MCP server, 32K+ LOC, 1,403 tests, 100% pass rate. Tech: Python, MCP, AI Orchestration.</li>
           <li>Aligna (align-a.com): Conversational AI Recruiter with voice interviews via LiveKit. Tech: Next.js, Azure OpenAI, Docker.</li>
+          <li>Undisk MCP (mcp.undisk.app): Undo-first versioned file workspace for AI agents with immutable writes, surgical restore, and tamper-evident audit trail. Tech: MCP, Cloudflare Workers, Durable Objects.</li>
         </ul>
       </section>
       
@@ -738,7 +748,7 @@ function DesktopTerminal() {
           "  POST https://25x.codes/mcp/invoke",
           "",
           "Available Tools:",
-          "  • get_project_details  Get project info (bayan, fiml, aligna, aivision)",
+          "  • get_project_details  Get project info (bayan, fiml, aligna, aivision, undisk)",
           "  • run_terminal_command Run: about, skills, projects, contact, experience",
           "",
           "Example:",

@@ -95,6 +95,26 @@ const projects: Record<string, {
     links: {},
     impact: "Patent-pending AI technology for home services",
     category: "startup"
+  },
+  undisk: {
+    id: "undisk",
+    title: "Undisk MCP",
+    description: "Undo-first MCP workspace for AI agents with immutable versioning, policy guardrails, and tamper-evident audit trails. Built for safe multi-agent file operations at low latency.",
+    shortDescription: "Undo-first versioned file workspace for AI agents",
+    stack: ["MCP", "Cloudflare Workers", "Durable Objects", "R2", "D1"],
+    metrics: [
+      { label: "MCP Tools", value: "25" },
+      { label: "Restore Time", value: "<50ms" },
+      { label: "Typical Latency", value: "<20ms" },
+      { label: "Writes", value: "Immutable" }
+    ],
+    status: "live",
+    links: {
+      website: "https://mcp.undisk.app/",
+      demo: "https://mcp.undisk.app/docs"
+    },
+    impact: "Makes AI agent file edits reversible with per-file history and auditability",
+    category: "saas"
   }
 };
 
@@ -161,7 +181,13 @@ FEATURED PROJECTS
    Conversational AI recruiter with voice interviews
    Helps startups cut hiring time
 
-4. AI Vision
+4. Undisk MCP (mcp.undisk.app)
+   Status: Live
+   Stack: MCP, Cloudflare Workers, Durable Objects
+   Undo-first versioned file workspace for AI agents
+   25 MCP tools | <50ms restore | immutable writes
+
+5. AI Vision
    Status: Live
    Stack: Computer Vision, iOS, ML
    Patent-pending AI solutions for home services
@@ -430,7 +456,7 @@ const toolDefinitions: Record<string, { description: string; inputSchema: object
         projectId: {
           type: "string",
           description: "The project ID to retrieve",
-          enum: ["bayan", "fiml", "aligna", "aivision"]
+          enum: ["bayan", "fiml", "aligna", "aivision", "undisk"]
         },
         includeStack: {
           type: "boolean",
@@ -545,7 +571,8 @@ export const onRequest = async (context: { request: Request; env: Env }): Promis
           get_project_bayan: "/mcp/invoke?projectId=bayan",
           get_project_fiml: "/mcp/invoke?projectId=fiml",
           get_project_aligna: "/mcp/invoke?projectId=aligna",
-          get_project_aivision: "/mcp/invoke?projectId=aivision"
+          get_project_aivision: "/mcp/invoke?projectId=aivision",
+          get_project_undisk: "/mcp/invoke?projectId=undisk"
         },
         availableCommands: Object.keys(terminalCommands),
         availableProjects: Object.keys(projects)

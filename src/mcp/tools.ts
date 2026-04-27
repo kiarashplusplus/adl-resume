@@ -32,7 +32,7 @@ export interface MCPTool {
 export const getProjectDetailsSchema = z.object({
   projectId: z
     .string()
-    .describe("The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision')"),
+    .describe("The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'undisk')"),
   includeStack: z
     .boolean()
     .optional()
@@ -105,7 +105,12 @@ AI/ML:
    - Voice interviews via LiveKit
    - Tech: Next.js, Azure OpenAI, Docker
 
-4. AI Vision
+4. Undisk MCP (mcp.undisk.app)
+   - Undo-first versioned file workspace for AI agents
+   - 25 MCP tools | <50ms restore | immutable writes
+   - Tech: MCP, Cloudflare Workers, Durable Objects
+
+5. AI Vision
    - Patent-pending AI solutions for home services
    - Status: App Store Live`,
 
@@ -312,8 +317,8 @@ const jsonSchemas: Record<string, object> = {
     properties: {
       projectId: {
         type: "string",
-        description: "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision')",
-        enum: ["bayan", "fiml", "aligna", "aivision"]
+        description: "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'undisk')",
+        enum: ["bayan", "fiml", "aligna", "aivision", "undisk"]
       },
       includeStack: {
         type: "boolean",

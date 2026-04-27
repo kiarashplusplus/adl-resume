@@ -1037,6 +1037,70 @@ function App() {
               <ScrollReveal className="scroll-reveal-child">
                 <article className="group relative project" itemScope itemType="https://schema.org/SoftwareApplication">
                   {/* Gradient glow on hover */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 via-teal-500 to-cyan-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
+
+                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-cyan-500/40 bg-card overflow-hidden">
+                    {/* Decorative corner accent */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-cyan-500/10 to-transparent rounded-bl-full" />
+
+                    <div className="flex flex-col md:flex-row md:items-start gap-6 relative z-10">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-3">
+                          <h3 className="text-xl md:text-2xl font-bold group-hover:text-cyan-500 transition-colors" itemProp="name">
+                            <a href="https://mcp.undisk.app/" target="_blank" rel="noopener noreferrer" className="hover:underline">Undisk MCP</a>
+                          </h3>
+                          <Badge variant="outline" className="border-cyan-500/50 text-cyan-600 bg-cyan-500/10 text-xs" itemProp="applicationCategory">MCP Infrastructure</Badge>
+                          <Badge variant="outline" className="border-emerald-500/50 text-emerald-600 bg-emerald-500/10 text-xs">Live</Badge>
+                        </div>
+                        <p className="text-foreground/80 mb-4 leading-relaxed" itemProp="description">
+                          Undo-first versioned file workspace for AI agents with immutable writes, policy guardrails, and tamper-evident audit trails built for reliable multi-agent workflows.
+                        </p>
+                        <ul className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4" role="list" aria-label="Project metrics">
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-cyan-500/30 transition-colors">
+                            <div className="text-xl font-bold text-cyan-500">25</div>
+                            <div className="text-xs text-muted-foreground">MCP Tools</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-cyan-500/30 transition-colors">
+                            <div className="text-xl font-bold text-cyan-500">&lt;50ms</div>
+                            <div className="text-xs text-muted-foreground">Restore</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-cyan-500/30 transition-colors">
+                            <div className="text-xl font-bold text-cyan-500">&lt;20ms</div>
+                            <div className="text-xs text-muted-foreground">Latency</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-cyan-500/30 transition-colors">
+                            <div className="text-xl font-bold text-cyan-500">Immutable</div>
+                            <div className="text-xs text-muted-foreground">Writes</div>
+                          </li>
+                        </ul>
+                        <ul className="flex flex-wrap gap-1.5 mb-3" role="list" aria-label="Technologies used">
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">MCP</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Cloudflare Workers</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Durable Objects</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">R2</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">D1</Badge></li>
+                        </ul>
+                        <div className="flex items-center gap-2 p-2 rounded-lg bg-cyan-500/5 border border-cyan-500/20 text-xs">
+                          <span className="text-cyan-500" aria-hidden="true">✓</span>
+                          <span className="text-muted-foreground"><strong className="font-medium text-foreground">Impact:</strong> Makes AI agent file operations reversible with per-file history and auditable recovery.</span>
+                        </div>
+                      </div>
+                      <nav className="flex flex-row gap-2" aria-label="Project links">
+                        <a href="https://mcp.undisk.app/" target="_blank" rel="noopener noreferrer" className="flex-shrink-0 min-h-[44px] min-w-[44px] p-3 rounded-xl bg-muted/80 hover:bg-cyan-500 hover:text-white transition-all duration-300 flex items-center justify-center group/btn hover:shadow-lg hover:shadow-cyan-500/20 hover:-translate-y-0.5" aria-label="View Undisk MCP website" itemProp="url">
+                          <Link className="h-5 w-5 group-hover/btn:scale-110 transition-transform" />
+                        </a>
+                        <a href="https://mcp.undisk.app/docs" target="_blank" rel="noopener noreferrer" className="flex-shrink-0 min-h-[44px] min-w-[44px] p-3 rounded-xl bg-muted/80 hover:bg-primary hover:text-primary-foreground transition-all duration-300 flex items-center justify-center group/btn hover:shadow-lg hover:shadow-primary/20 hover:-translate-y-0.5" aria-label="View Undisk MCP docs">
+                          <Link className="h-5 w-5 group-hover/btn:scale-110 transition-transform" />
+                        </a>
+                      </nav>
+                    </div>
+                  </Card>
+                </article>
+              </ScrollReveal>
+
+              <ScrollReveal className="scroll-reveal-child">
+                <article className="group relative project" itemScope itemType="https://schema.org/SoftwareApplication">
+                  {/* Gradient glow on hover */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
                   
                   <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-blue-500/40 bg-card overflow-hidden">

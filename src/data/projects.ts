@@ -101,6 +101,27 @@ export const projects: Record<string, Project> = {
     impact: "Patent-pending CV technology for home services",
     category: "startup",
   },
+  undisk: {
+    id: "undisk",
+    title: "Undisk MCP",
+    description:
+      "Undo-first MCP workspace for AI agents with immutable versioning, policy guardrails, and tamper-evident audit trails. Built for safe multi-agent file operations at low latency.",
+    shortDescription: "Undo-first versioned file workspace for AI agents",
+    stack: ["MCP", "Cloudflare Workers", "Durable Objects", "R2", "D1"],
+    metrics: [
+      { label: "MCP Tools", value: "25" },
+      { label: "Restore Time", value: "<50ms" },
+      { label: "Typical Latency", value: "<20ms" },
+      { label: "Writes", value: "Immutable" },
+    ],
+    status: "live",
+    links: {
+      website: "https://mcp.undisk.app/",
+      demo: "https://mcp.undisk.app/docs",
+    },
+    impact: "Makes AI agent file edits reversible with per-file history and auditability",
+    category: "saas",
+  },
 }
 
 export const projectList = Object.values(projects)
