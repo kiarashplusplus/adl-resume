@@ -1648,7 +1648,7 @@ function App() {
             
             {/* Bottom info */}
             <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
-              <p>© 2025 Kiarash Adl</p>
+              <p>© 2026 Kiarash Adl</p>
               <span className="hidden sm:flex items-center gap-1.5">
                 Press <kbd className="px-1.5 py-0.5 text-xs font-mono bg-muted rounded border border-border">?</kbd> for shortcuts
               </span>
