@@ -17,28 +17,21 @@ npm run dev
 
 ## 📄 Updating the Resume PDF
 
-When you update the resume PDF, the Vite build will generate a new content-based hash in the filename. You'll need to update the URL in these files:
+The resume is served from a **permanent, un-hashed URL** so external links never break:
 
-1. **Replace the PDF file:**
-   ```
-   src/assets/documents/Kiarash-Adl-Resume-YYYYMMDD.pdf
-   ```
+- Local file: `public/Kiarash-Adl-Resume.pdf`
+- Public URL: `https://25x.codes/Kiarash-Adl-Resume.pdf`
 
-2. **Build to get the new hash:**
-   ```bash
-   npm run build
-   ```
-   Check `dist/assets/` for the new filename (e.g., `Kiarash-Adl-Resume-20251201-NEWHASH.pdf`)
+To update the resume, simply replace that single file and redeploy. No code changes are needed.
 
-3. **Update these files with the new URL:**
-   - `functions/mcp/invoke.ts` (2 locations - terminal output and resources field)
-   - `src/components/TerminalSection.tsx` (2 locations - display text and window.open)
-   - `src/mcp/tools.ts` (1 location)
+```bash
+cp /path/to/new-resume.pdf public/Kiarash-Adl-Resume.pdf
+npm run build   # optional, just to sanity-check
+git commit -am "Update resume PDF"
+git push        # Cloudflare Pages auto-deploys
+```
 
-4. **Search for the old hash to find all occurrences:**
-   ```bash
-   grep -r "DFXsl4HJ" src/ functions/
-   ```
+> Do **not** import the PDF from `src/` — that path goes through Vite's asset pipeline and gets a content hash like `Kiarash-Adl-Resume-20251129-DFXsl4HJ.pdf`, which changes on every content update and breaks any link that points at it.
 
 ## 🤖 MCP Integration
 

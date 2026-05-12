@@ -46,7 +46,8 @@
         "tailwindcss": "^4.1.17",
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.48.0",
-        "vite": "^6.4.1"
+        "vite": "^6.4.1",
+        "wrangler": "^4.90.0"
     },
     "workspaces": {
         "packages": [

@@ -173,7 +173,7 @@ const commands: Record<string, string[]> = {
     "Resume - Kiarash Adl",
     "",
     "Download PDF:",
-    "  https://25x.codes/assets/Kiarash-Adl-Resume-20251129-DFXsl4HJ.pdf",
+    "  https://25x.codes/Kiarash-Adl-Resume.pdf",
     "",
     "Summary:",
     "  Senior Software Engineer & AI Systems Architect",
@@ -829,8 +829,9 @@ function DesktopTerminal() {
     }
     
     // Special handling for 'resume' command - open resume PDF
+    // Use the permanent (un-hashed) URL served from public/ so this never breaks on redeploy.
     if (trimmedInput === "resume" || trimmedInput === "cv") {
-      window.open("/assets/Kiarash-Adl-Resume-20251129-DFXsl4HJ.pdf", "_blank", "noopener,noreferrer")
+      window.open("/Kiarash-Adl-Resume.pdf", "_blank", "noopener,noreferrer")
     }
     
     let output: string[]

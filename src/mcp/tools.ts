@@ -163,7 +163,7 @@ Endpoint:  POST https://25x.codes/mcp/invoke
 Tools: submit_contact, get_project_details, run_terminal_command
 Commands: about, skills, projects, contact, experience, resume`,
 
-  resume: `RESUME - KIARASH ADL - PDF: https://25x.codes/assets/Kiarash-Adl-Resume-20251129-DFXsl4HJ.pdf - Senior Software Engineer & AI Systems Architect | MIT EECS '14`,
+  resume: `RESUME - KIARASH ADL - PDF: https://25x.codes/Kiarash-Adl-Resume.pdf - Senior Software Engineer & AI Systems Architect | MIT EECS '14`,
 }
 
 // ============================================================================
