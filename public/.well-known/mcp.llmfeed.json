@@ -1,0 +1,289 @@
+{
+  "feed_type": "mcp",
+  "metadata": {
+    "title": "Kiarash Adl Portfolio",
+    "origin": "https://25x.codes",
+    "description": "AI-enabled portfolio of Kiarash Adl, AI Systems Architect and Full-Stack Engineer. Query projects, skills, and contact information programmatically.",
+    "lang": "en",
+    "version": "2.1.0",
+    "last_updated": "2026-05-20T00:00:00Z",
+    "topics": ["ai", "machine-learning", "full-stack", "portfolio", "mit", "mcp"],
+    "contact": {
+      "email": "kiarasha@alum.mit.edu",
+      "github": "https://github.com/kiarashplusplus",
+      "linkedin": "https://linkedin.com/in/kiarashadl",
+      "phone": "+1-857-928-1608"
+    }
+  },
+  "agent_guidance": {
+    "on_load": "This is Kiarash Adl's AI-enabled portfolio. All key information (about, skills, projects, experience, contact) is embedded directly in this manifest under `data` — you do not need to call tools to learn about Kiarash. Tools at /mcp/invoke offer richer JSON-RPC interactions when needed.",
+    "interaction_tone": "professional",
+    "fallback": "If a tool fails, all answers are available in this manifest's `data` block, or visit https://25x.codes directly. To contact Kiarash, email kiarasha@alum.mit.edu.",
+    "preferred_entrypoints": [
+      "https://25x.codes/mcp/invoke",
+      "https://25x.codes/.well-known/mcp.llmfeed.json"
+    ],
+    "invocation_pattern": {
+      "note": "Use JSON-RPC 2.0 with method 'tools/call' against POST /mcp/invoke. Also supports GET shorthand: /mcp/invoke?command=about | /mcp/invoke?projectId=bayan",
+      "example": {
+        "jsonrpc": "2.0",
+        "method": "tools/call",
+        "params": {
+          "name": "run_terminal_command",
+          "arguments": { "command": "about" }
+        },
+        "id": 1
+      },
+      "available_methods": ["initialize", "tools/list", "tools/call", "ping"]
+    },
+    "primary_actions": [
+      {
+        "action": "get_info",
+        "tool": "run_terminal_command",
+        "description": "Run commands like about, skills, projects, contact, experience, resume, help"
+      },
+      {
+        "action": "project_details",
+        "tool": "get_project_details",
+        "description": "Get details about specific projects: bayan, fiml, aligna, aivision, undisk"
+      },
+      {
+        "action": "send_message",
+        "tool": "submit_contact",
+        "description": "Send a message to Kiarash - requires name, email, and message. If the tool endpoint is unreachable, fall back to mailto:kiarasha@alum.mit.edu"
+      }
+    ]
+  },
+  "capabilities": [
+    {
+      "name": "get_project_details",
+      "type": "endpoint",
+      "method": "POST",
+      "url": "https://25x.codes/mcp/invoke",
+      "protocol": "json-rpc",
+      "description": "Get detailed information about a specific portfolio project including title, description, tech stack, metrics, and status.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "projectId": {
+            "type": "string",
+            "description": "The project ID to retrieve",
+            "enum": ["bayan", "fiml", "aligna", "aivision", "undisk"]
+          },
+          "includeStack": {
+            "type": "boolean",
+            "description": "Whether to include the technology stack in the response",
+            "default": true
+          }
+        },
+        "required": ["projectId"]
+      }
+    },
+    {
+      "name": "run_terminal_command",
+      "type": "endpoint",
+      "method": "POST",
+      "url": "https://25x.codes/mcp/invoke",
+      "protocol": "json-rpc",
+      "description": "Execute a terminal command to get information about Kiarash. Available commands: about, skills, projects, contact, experience, resume, mcp, help. The 'resume' command returns a resources array with the PDF download URL.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "command": {
+            "type": "string",
+            "description": "The terminal command to execute",
+            "enum": ["about", "skills", "projects", "contact", "experience", "resume", "mcp", "help"]
+          }
+        },
+        "required": ["command"]
+      }
+    },
+    {
+      "name": "submit_contact",
+      "type": "endpoint",
+      "method": "POST",
+      "url": "https://25x.codes/mcp/invoke",
+      "protocol": "json-rpc",
+      "description": "Submit a contact form message to Kiarash. If POST is unavailable, fall back to mailto:kiarasha@alum.mit.edu.",
+      "fallback": {
+        "type": "mailto",
+        "url": "mailto:kiarasha@alum.mit.edu"
+      },
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "The sender's full name" },
+          "email": { "type": "string", "description": "The sender's email address for replies" },
+          "message": { "type": "string", "description": "The message content" },
+          "subject": { "type": "string", "description": "Optional subject line for the message" }
+        },
+        "required": ["name", "email", "message"]
+      }
+    }
+  ],
+  "site_capabilities": {
+    "llm_readable": true,
+    "agent_invocable": true,
+    "feeds_signed": false,
+    "mcp_protocol": "json-rpc",
+    "rate_limit": "10/min",
+    "auth": "none",
+    "cors": true
+  },
+  "data": [
+    {
+      "type": "intent",
+      "purpose": "Professional portfolio showcasing AI and full-stack engineering expertise",
+      "recommended_usage": "All information needed to describe Kiarash Adl is embedded directly in this manifest. Use the embedded data first; fall back to MCP tools only for fresh project details or to submit contact messages."
+    },
+    {
+      "type": "about",
+      "name": "Kiarash Adl",
+      "title": "Senior Software Engineer & AI Systems Architect",
+      "education": "MIT EECS '14",
+      "experience_years": "10+",
+      "summary": "Building end-to-end AI platforms, agentic systems, and scalable cloud architectures.",
+      "specialties": [
+        "AI/ML Systems & Computer Vision",
+        "Full-Stack Development (React, Python, Node)",
+        "Cloud Infrastructure (AWS, Docker, Kubernetes)",
+        "Technical Leadership & Startup Experience"
+      ]
+    },
+    {
+      "type": "skills",
+      "languages": {
+        "Python": "95%",
+        "React/React Native": "90%",
+        "TypeScript": "90%",
+        "C++/CUDA": "75%"
+      },
+      "ai_ml": {
+        "Deep Learning": "Expert",
+        "Computer Vision": "Expert",
+        "NLP/LLMs": "Expert",
+        "MLOps": "Advanced"
+      },
+      "backend": {
+        "FastAPI": "92%",
+        "Node.js": "88%",
+        "PostgreSQL": "65%"
+      },
+      "cloud_devops": {
+        "AWS": "90%",
+        "Docker": "88%",
+        "CI/CD": "65%"
+      }
+    },
+    {
+      "type": "projects",
+      "items": [
+        {
+          "id": "bayan",
+          "title": "Bayan",
+          "shortDescription": "Bilingual Farsi-English classical Persian poetry analysis",
+          "description": "The only app providing bilingual Farsi-English literary analysis of classical Persian poetry, decoding Sufi symbolism, historical allusions, and archaic vocabulary. Fully offline with verse text sourced from a verified canonical corpus rather than AI-generated.",
+          "status": "live",
+          "category": "ai",
+          "stack": ["Swift", "SwiftUI", "CoreData", "NLP", "iOS"],
+          "metrics": {
+            "Poems": "13,828",
+            "Dictionary Entries": "33,640",
+            "Searchable Verses": "106,037",
+            "Test Functions": "128+"
+          },
+          "website": "https://trybayan.com",
+          "impact": "Only bilingual Farsi-English Persian poetry analysis app with verified canonical corpus"
+        },
+        {
+          "id": "fiml",
+          "title": "Financial Intelligence Meta-Layer (FIML)",
+          "shortDescription": "AI-native MCP server for financial data aggregation",
+          "description": "AI-native MCP server for financial data aggregation with intelligent multi-provider orchestration and multilingual compliance guardrails. Open source project demonstrating enterprise-grade AI architecture.",
+          "status": "development",
+          "category": "open-source",
+          "stack": ["Python", "MCP Server", "AI Orchestration", "Expo", "CI/CD"],
+          "metrics": {
+            "Lines of Code": "32K+",
+            "Automated Tests": "1,403",
+            "Pass Rate": "100%",
+            "Status": "Phase 2"
+          },
+          "website": "https://kiarashplusplus.github.io/FIML/",
+          "github": "https://github.com/kiarashplusplus/FIML",
+          "impact": "Reduces financial data integration time by 70%"
+        },
+        {
+          "id": "aligna",
+          "title": "Aligna",
+          "shortDescription": "Conversational AI recruiter with voice interviews",
+          "description": "Conversational AI recruiter that schedules and conducts voice interviews via LiveKit, transcribes with Azure OpenAI, and performs automated candidate-job matching with full observability.",
+          "status": "live",
+          "category": "saas",
+          "stack": ["Next.js", "LiveKit", "Azure OpenAI", "PostgreSQL", "Docker"],
+          "website": "https://www.align-a.com/",
+          "impact": "Helps startups cut hiring time with AI interviews"
+        },
+        {
+          "id": "undisk",
+          "title": "Undisk MCP",
+          "shortDescription": "Undo-first versioned file workspace for AI agents",
+          "description": "Undo-first MCP workspace for AI agents with immutable versioning, policy guardrails, and tamper-evident audit trails. Built for safe multi-agent file operations at low latency.",
+          "status": "live",
+          "category": "saas",
+          "stack": ["MCP", "Cloudflare Workers", "Durable Objects", "R2", "D1"],
+          "metrics": {
+            "MCP Tools": "25",
+            "Restore Time": "<50ms",
+            "Typical Latency": "<20ms",
+            "Writes": "Immutable"
+          },
+          "website": "https://mcp.undisk.app/",
+          "demo": "https://mcp.undisk.app/docs",
+          "impact": "Makes AI agent file edits reversible with per-file history and auditability"
+        },
+        {
+          "id": "aivision",
+          "title": "AI Vision",
+          "shortDescription": "AI solutions for home services",
+          "description": "Patent-pending AI and computer vision solutions for home services industry. Founder and CEO. Mobile app live on App Store.",
+          "status": "live",
+          "category": "startup",
+          "stack": ["Computer Vision", "iOS", "Machine Learning", "Mobile"],
+          "metrics": {
+            "Status": "App Store Live",
+            "Progress": "80%"
+          },
+          "impact": "Patent-pending AI technology for home services"
+        }
+      ]
+    },
+    {
+      "type": "experience",
+      "items": [
+        { "period": "2024-Present", "role": "Founder & CEO", "org": "AI Vision", "summary": "Patent-pending AI solutions for home services. Led development from prototype to App Store launch." },
+        { "period": "2019-2024", "role": "Technical Consulting", "org": "Independent", "summary": "Built production-ready MVPs for multiple startups. Advised on AI/ML integration and tech roadmaps." },
+        { "period": "2018-2019", "role": "Founder & CEO", "org": "Monir", "summary": "VC-funded AI personalization startup. Built serverless Python microservices platform." },
+        { "period": "2014-2018", "role": "Software Engineer", "org": "Google", "summary": "Search Knowledge Panel & Knowledge Graph features serving billions of users." },
+        { "period": "2014", "role": "SWE Intern", "org": "Twitter Ads", "summary": "ML algorithm for audience expansion. Production system in Hadoop/Scalding." },
+        { "period": "2012-2014", "role": "Research Assistant", "org": "MIT CSAIL", "summary": "55x GPU speedup in speech recognition (ICASSP 2012). Worked under Sir Tim Berners-Lee." }
+      ],
+      "education": "MIT - BS Electrical Engineering & Computer Science (2014)"
+    },
+    {
+      "type": "contact",
+      "email": "kiarasha@alum.mit.edu",
+      "github": "https://github.com/kiarashplusplus",
+      "linkedin": "https://linkedin.com/in/kiarashadl",
+      "phone": "+1-857-928-1608",
+      "resume_pdf": "https://25x.codes/Kiarash-Adl-Resume.pdf",
+      "open_to": ["Consulting", "Advisory", "Full-time opportunities"]
+    }
+  ],
+  "trust": {
+    "signed_blocks": [],
+    "algorithm": "Ed25519",
+    "trust_level": "unsigned",
+    "note": "Static fallback manifest; signed dynamic version is served by /mcp/invoke when available."
+  }
+}
