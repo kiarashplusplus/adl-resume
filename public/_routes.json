@@ -1,5 +1,6 @@
 {
   "version": 1,
-  "include": ["/*"],
+  "description": "Route only dynamic endpoints through Cloudflare Pages Functions. Everything else (including /.well-known/* static files) is served from static assets, so the discovery manifest stays reachable even if Functions are not deployed.",
+  "include": ["/mcp/invoke", "/mcp/health", "/contact", "/guestbook"],
   "exclude": []
 }

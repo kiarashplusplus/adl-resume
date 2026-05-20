@@ -35,20 +35,23 @@
 # ===========================================
 # MCP Endpoints
 # ===========================================
-# Allow .well-known directory to be served
-/.well-known/*
-  Access-Control-Allow-Origin: *
-  Content-Type: application/json
-  Cache-Control: public, max-age=3600
-
-# MCP discovery file specifically
+# MCP discovery manifest - served as a static JSON asset so it remains
+# reachable even if Pages Functions are not deployed. Functions can still
+# override this at runtime (e.g. to add an Ed25519 signature) if /mcp/*
+# routes are enabled in _routes.json.
 /.well-known/mcp.llmfeed.json
   Access-Control-Allow-Origin: *
   Access-Control-Allow-Methods: GET, OPTIONS
   Access-Control-Allow-Headers: Content-Type
-  Content-Type: application/json
+  Content-Type: application/json; charset=utf-8
   Cache-Control: public, max-age=3600
   X-Content-Type-Options: nosniff
+
+# Public key for verifying signed MCP manifests
+/.well-known/public.pem
+  Access-Control-Allow-Origin: *
+  Content-Type: application/x-pem-file
+  Cache-Control: public, max-age=3600
 
 # MCP invoke endpoint - short cache for dynamic responses
 /mcp/invoke

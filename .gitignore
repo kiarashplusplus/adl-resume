@@ -44,3 +44,5 @@ wrangler.toml
 # MCP signing keys - never commit
 workers/.keys/
 *.pem
+# ...except the published public verification key, which is safe by design
+!public/.well-known/public.pem
