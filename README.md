@@ -6,7 +6,8 @@ AI-enabled portfolio with MCP (Model Context Protocol) integration, allowing AI 
 
 - **Frontend:** React, TypeScript, Vite, Tailwind CSS, Framer Motion
 - **Backend:** Cloudflare Pages Functions
-- **MCP:** JSON-RPC protocol with Ed25519 signed manifests
+- **MCP:** Streamable HTTP MCP endpoint (`/mcp`), LLMFeed manifest, `llms.txt`
+- **Email:** Cloudflare Email Routing via the `contact-mailer` Worker (see [DEPLOYMENT.md](DEPLOYMENT.md))
 
 ## 🛠️ Development
 
@@ -31,75 +32,47 @@ git commit -am "Update resume PDF"
 git push        # Cloudflare Pages auto-deploys
 ```
 
-> Do **not** import the PDF from `src/` — that path goes through Vite's asset pipeline and gets a content hash like `Kiarash-Adl-Resume-20251129-DFXsl4HJ.pdf`, which changes on every content update and breaks any link that points at it.
+> Do **not** import the PDF from `src/` — that path goes through Vite's asset pipeline and gets a content hash ## 🤖 MCP Integration / contacting Kiarash (for AI agents)
 
-## 🤖 MCP Integration
-
-This portfolio implements the [Model Context Protocol (MCP)](https://modelcontextprotocol.io/), enabling AI agents to interact with the portfolio programmatically.
+Start at **https://25x.codes/llms.txt**. It is the plain-text guide for agents, including how to send Kiarash a message.
 
 ### Endpoints
 
-- **Discovery:** `/.well-known/mcp.llmfeed.json`
-- **Invoke:** `/mcp/invoke`
+- **MCP (Streamable HTTP, stateless JSON-RPC 2.0):** `POST /mcp` (same handler as the older `/mcp/invoke`)
+- **Contact (plain REST):** `POST /contact`
+- **Discovery:** `/.well-known/mcp.llmfeed.json`, `/llms.txt`
+- **Health:** `/mcp/health`
 
-### Available Tools
+### Tools
 
 | Tool | Description |
 |------|-------------|
-| `submit_contact` | Send a message directly to Kiarash's inbox |
-| `run_terminal_command` | Execute terminal commands (about, skills, projects, contact, experience, resume, help) |
-| `get_project_details` | Get details about specific projects (bayan, fiml, aligna, aivision) |
+| `submit_contact` | Email Kiarash (Cloudflare Email Routing). Returns `status: "sent"` + `message_id`, or `isError: true` with the reason |
+| `run_terminal_command` | about, skills, projects, contact, experience, resume, mcp, help |
+| `get_project_details` | bayan, fiml, aligna, aivision, undisk, interviewreadynot |
 
-### Usage Example
-
-AI agents can discover capabilities and invoke tools using JSON-RPC 2.0:
+### Send a message
 
 ```bash
-# Discover MCP capabilities
-curl -s "https://25x.codes/.well-known/mcp.llmfeed.json"
+curl -sS https://25x.codes/contact -H 'Content-Type: application/json' \
+  -d '{"name":"Your Name","email":"you@example.com","subject":"Hello","message":"Your message"}'
 
-# Send a message to Kiarash
-curl -s -X POST "https://25x.codes/mcp/invoke" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "submit_contact",
-      "arguments": {
-        "name": "Your Name",
-        "email": "your@email.com",
-        "message": "Hello, fellow code explorer!"
-      }
-    },
-    "id": 1
-  }'
-
-# Run a terminal command
-curl -s -X POST "https://25x.codes/mcp/invoke" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "run_terminal_command",
-      "arguments": {
-        "command": "about"
-      }
-    },
-    "id": 1
-  }'
+# or via MCP
+curl -sS https://25x.codes/mcp -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"submit_contact","arguments":{"name":"Your Name","email":"you@example.com","message":"Your message"}}}'
 ```
 
-### For AI Agents
+Limits: name ≤100, subject ≤150, message ≤5000 chars; 5 messages / 10 min per client; optional `idempotency_key`. Fallback: mailto:kiarasha@alum.mit.edu
 
-Point your AI agent to the MCP manifest at:
-```
-https://25x.codes/.well-known/mcp.llmfeed.json
+### Tests
+
+```bash
+npm test          # vitest: MCP protocol, contact delivery (mocked mailer), mailer MIME
+npm run typecheck # functions/, server/, workers/, tests/
 ```
 
-The manifest includes:
-- Tool schemas with input/output definitions
+Tool schemas with input/output definitions
 - Agent guidance for interaction patterns
 - Ed25519 signed blocks for verification
 

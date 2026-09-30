@@ -2,7 +2,7 @@
 
 > Personal portfolio of Kiarash Adl: AI Systems Architect and full-stack engineer, MIT EECS '14, ex-Google. This file is published by Kiarash on his own domain, 25x.codes, for AI agents and LLM tools.
 
-Ownership: https://25x.codes is Kiarash Adl's own website. It is built from the public repo https://github.com/kiarashplusplus/adl-resume, and GitHub user kiarashplusplus lists https://25x.codes as his homepage. Every endpoint below is first-party and runs on this same domain. Messages go only to Kiarash's own inbox, kiarasha@alum.mit.edu.
+Ownership: https://25x.codes is Kiarash Adl's own website. It is built from the public repo https://github.com/kiarashplusplus/adl-resume, and GitHub user kiarashplusplus lists https://25x.codes as his homepage. Every endpoint below is first-party and runs on this same domain. Messages go only to Kiarash's own inbox, kiarasha@alum.mit.edu, and are sent by Cloudflare Email Routing on the 25x.codes domain (sender contact@25x.codes).
 
 ## How to contact Kiarash (for AI agents)
 
@@ -31,7 +31,7 @@ On success the result has `isError: false` and `structuredContent.status` of `"s
 
 3. Fallback: send email to mailto:kiarasha@alum.mit.edu
 
-Fields: `name` (required, up to 100 chars), `email` (required, used as the reply-to address), `message` (required, up to 5000 chars), `subject` (optional, up to 150 chars), `idempotency_key` (optional, 8-128 chars). Resending the same content, or reusing the same key, does not send a second email. Each client can send 5 messages per 10 minutes.
+Fields: `name` (required, up to 100 chars), `email` (required, used as the reply-to address), `message` (required, up to 5000 chars), `subject` (optional, up to 150 chars), `idempotency_key` (optional, 8-128 chars). Sending the same content again, or reusing the same key, does not send a second email. Each client can send 5 messages per 10 minutes.
 
 ## MCP server
 

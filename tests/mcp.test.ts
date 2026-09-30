@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { readFileSync } from "node:fs";
 import { onRequest as invoke } from "../functions/mcp/invoke";
 import { onRequest as mcpIndex } from "../functions/mcp/index";
@@ -7,10 +7,16 @@ import { RATE_LIMIT, resetContactState, sendContact, validateContact } from "../
 import { LATEST_PROTOCOL_VERSION } from "../server/mcp/handler";
 import { SERVER_INFO } from "../server/mcp/tools";
 
-const ENV = { RESEND_API_KEY: "re_test", CONTACT_EMAIL: "owner@example.com", CONTACT_FROM: "Site <contact@25x.codes>" };
+// Mock of the CONTACT_MAILER service binding (the contact-mailer Worker).
+const mailerFetch = vi.fn(async (_input: Request | string, init?: RequestInit) => {
+  const body = JSON.parse(String(init?.body));
+  return new Response(JSON.stringify({ id: `<${body.messageId}>` }), { status: 200 });
+});
+const ENV = { CONTACT_MAILER: { fetch: mailerFetch } };
+type TestEnv = Record<string, unknown>;
 let ipCounter = 0;
 
-function rpc(body: unknown, opts: { env?: Record<string, string>; headers?: Record<string, string>; path?: string; ip?: string } = {}) {
+function rpc(body: unknown, opts: { env?: TestEnv; headers?: Record<string, string>; path?: string; ip?: string } = {}) {
   const request = new Request(`https://25x.codes${opts.path ?? "/mcp"}`, {
     method: "POST",
     headers: {
@@ -29,13 +35,11 @@ const contactArgs = { name: "Ada Agent", email: "ada@example.com", subject: "Hi"
 const callContact = (args: Record<string, unknown> = contactArgs, opts = {}) =>
   rpc({ jsonrpc: "2.0", id: 7, method: "tools/call", params: { name: "submit_contact", arguments: args } }, opts);
 
-let fetchMock: ReturnType<typeof vi.fn>;
+const fetchMock = mailerFetch;
 beforeEach(() => {
   resetContactState();
-  fetchMock = vi.fn(async () => new Response(JSON.stringify({ id: "email_123" }), { status: 200 }));
-  vi.stubGlobal("fetch", fetchMock);
+  mailerFetch.mockClear();
 });
-afterEach(() => vi.unstubAllGlobals());
 
 describe("MCP protocol", () => {
   it("initialize negotiates a supported version and returns spec-shaped result", async () => {
@@ -104,16 +108,17 @@ describe("MCP protocol", () => {
 });
 
 describe("submit_contact", () => {
-  it("delivers via Resend and returns the message id", async () => {
+  it("delivers via the CONTACT_MAILER binding and returns the message id", async () => {
     const body = await (await callContact()).json();
     expect(body.result.isError).toBe(false);
-    expect(body.result.structuredContent).toMatchObject({ status: "sent", message_id: "email_123", duplicate: false, reply_to: "ada@example.com" });
+    expect(body.result.structuredContent).toMatchObject({ status: "sent", duplicate: false, reply_to: "ada@example.com" });
+    expect(body.result.structuredContent.message_id).toMatch(/^<auto-[0-9a-f]{40}@25x\.codes>$/);
     expect(fetchMock).toHaveBeenCalledTimes(1);
     const [url, init] = fetchMock.mock.calls[0];
-    expect(url).toBe("https://api.resend.com/emails");
-    expect(init.headers["Idempotency-Key"]).toMatch(/^auto-[0-9a-f]{40}$/);
-    const sent = JSON.parse(init.body);
-    expect(sent).toMatchObject({ from: "Site <contact@25x.codes>", to: ["owner@example.com"], reply_to: "ada@example.com", subject: "[25x.codes] Hi" });
+    expect(new URL(String(url)).pathname).toBe("/send");
+    const sent = JSON.parse(String(init?.body));
+    expect(sent).toMatchObject({ replyTo: "ada@example.com", replyToName: "Ada Agent", subject: "[25x.codes] Hi" });
+    expect(sent.messageId).toMatch(/^auto-[0-9a-f]{40}@25x\.codes$/);
     expect(sent.text).toContain("Hello Kiarash");
   });
 
@@ -121,7 +126,7 @@ describe("submit_contact", () => {
     const args = { ...contactArgs, idempotency_key: "retry-key-0001" };
     await callContact(args);
     const second = await (await callContact(args)).json();
-    expect(second.result.structuredContent).toMatchObject({ duplicate: true, message_id: "email_123" });
+    expect(second.result.structuredContent).toMatchObject({ duplicate: true, message_id: "<retry-key-0001@25x.codes>" });
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -132,18 +137,19 @@ describe("submit_contact", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("fails loudly (not a fake success) when RESEND_API_KEY is missing", async () => {
+  it("fails loudly (not a fake success) when the CONTACT_MAILER binding is missing", async () => {
     const body = await (await callContact(contactArgs, { env: {} })).json();
     expect(body.result.isError).toBe(true);
     expect(body.result.content[0].text).toContain("NOT sent");
     expect(body.result.content[0].text).toContain("mailto:kiarasha@alum.mit.edu");
   });
 
-  it("reports provider errors as isError", async () => {
-    fetchMock.mockResolvedValueOnce(new Response('{"message":"bad"}', { status: 422 }));
+  it("reports Cloudflare send errors as isError", async () => {
+    fetchMock.mockResolvedValueOnce(new Response('{"error":"send_failed","code":"E_RECIPIENT_NOT_ALLOWED"}', { status: 502 }));
     const body = await (await callContact()).json();
     expect(body.result.isError).toBe(true);
-    expect(body.result.content[0].text).toContain("HTTP 422");
+    expect(body.result.content[0].text).toContain("HTTP 502, E_RECIPIENT_NOT_ALLOWED");
+    expect(body.result.content[0].text).toContain("NOT sent");
   });
 
   it("rate limits per client", async () => {
@@ -172,13 +178,13 @@ describe("submit_contact", () => {
 });
 
 describe("POST /contact", () => {
-  const post = (body: unknown, env: Record<string, string> = ENV) =>
+  const post = (body: unknown, env: TestEnv = ENV) =>
     contactPost({ request: new Request("https://25x.codes/contact", { method: "POST", headers: { "Content-Type": "application/json", "CF-Connecting-IP": `9.9.9.${++ipCounter}` }, body: JSON.stringify(body) }), env });
 
   it("returns 200 with message id on success", async () => {
     const res = await post(contactArgs);
     expect(res.status).toBe(200);
-    expect(await res.json()).toMatchObject({ success: true, status: "sent", message_id: "email_123" });
+    expect(await res.json()).toMatchObject({ success: true, status: "sent" });
   });
 
   it("maps failures to HTTP status codes", async () => {

@@ -2,30 +2,28 @@
  * Contact delivery shared by the website form (POST /contact) and the MCP
  * `submit_contact` tool (POST /mcp/invoke, alias /mcp).
  *
- * Delivery goes through Resend (https://resend.com). Configuration, all via
- * Cloudflare Pages environment variables / secrets:
- *   RESEND_API_KEY   required to deliver; without it every submission fails
- *                    with `not_configured` (never a fake success)
- *   CONTACT_EMAIL    inbox that receives messages (default: kiarasha@alum.mit.edu)
- *   CONTACT_FROM     verified sender, e.g. "25x.codes <contact@25x.codes>"
- *                    (default: Resend's shared test sender, which only delivers
- *                    to the Resend account owner's own address)
+ * Delivery: Cloudflare Email Routing. Pages Functions cannot hold a
+ * send_email binding, so we call the `adl-resume-contact-mailer` Worker
+ * (workers/contact-mailer) through a Pages *service binding*:
+ *   CONTACT_MAILER   service binding -> adl-resume-contact-mailer (required to
+ *                    deliver; without it every submission fails with
+ *                    `not_configured`, never a fake success)
  *   CONTACT_DRY_RUN  "1" = validate and log but do not send (local dev only)
- *   RESEND_API_URL   override the Resend endpoint (local testing only)
+ * Recipient (kiarasha@alum.mit.edu, a verified Email Routing destination) and
+ * sender (contact@25x.codes) are configured on the Worker, not here.
  */
 
+export interface ServiceBinding {
+  fetch(input: Request | string, init?: RequestInit): Promise<Response>;
+}
+
 export interface ContactEnv {
-  RESEND_API_KEY?: string;
-  CONTACT_EMAIL?: string;
-  CONTACT_FROM?: string;
+  CONTACT_MAILER?: ServiceBinding;
   CONTACT_DRY_RUN?: string;
-  RESEND_API_URL?: string;
 }
 
 export const OWNER_EMAIL = "kiarasha@alum.mit.edu";
 export const MAILTO_FALLBACK = `mailto:${OWNER_EMAIL}`;
-const DEFAULT_FROM = "25x.codes contact <onboarding@resend.dev>";
-const DEFAULT_RESEND_URL = "https://api.resend.com/emails";
 
 export const LIMITS = {
   name: 100,
@@ -116,7 +114,8 @@ async function sha256Hex(text: string): Promise<string> {
 
 // ---------------------------------------------------------------------------
 // In-memory state (per isolate). Good enough to stop accidental loops and
-// double submits; Resend's Idempotency-Key header dedupes across isolates.
+// double submits. The email's Message-ID is derived from the idempotency key,
+// so a duplicate that slips past another isolate carries the same Message-ID.
 // ---------------------------------------------------------------------------
 const sendLog = new Map<string, number[]>();
 const idempotencyCache = new Map<string, { at: number; result: ContactResult & { ok: true } }>();
@@ -157,7 +156,6 @@ export interface SendOptions {
   userAgent?: string;
   clientName?: string;
   now?: number;
-  fetchImpl?: typeof fetch;
 }
 
 /**
@@ -167,7 +165,6 @@ export interface SendOptions {
  */
 export async function sendContact(raw: unknown, env: ContactEnv, opts: SendOptions): Promise<ContactResult> {
   const now = opts.now ?? Date.now();
-  const doFetch = opts.fetchImpl ?? fetch;
 
   const parsed = validateContact(raw);
   if (!parsed.ok) {
@@ -200,7 +197,6 @@ export async function sendContact(raw: unknown, env: ContactEnv, opts: SendOptio
     };
   }
 
-  const to = env.CONTACT_EMAIL || OWNER_EMAIL;
   const subject = `[25x.codes] ${input.subject || `Message from ${input.name}`}`;
   const text = [
     input.message,
@@ -228,14 +224,14 @@ export async function sendContact(raw: unknown, env: ContactEnv, opts: SendOptio
 
   if (env.CONTACT_DRY_RUN === "1") {
     recordSend(opts.clientKey, now);
-    console.log("[contact] dry run, not sent:", JSON.stringify({ to, subject, idempotencyKey }));
+    console.log("[contact] dry run, not sent:", JSON.stringify({ subject, idempotencyKey }));
     const result = success("dry_run", `dry-run-${idempotencyKey}`);
     idempotencyCache.set(idempotencyKey, { at: now, result });
     return result;
   }
 
-  if (!env.RESEND_API_KEY) {
-    console.error("[contact] RESEND_API_KEY is not configured; message NOT delivered");
+  if (!env.CONTACT_MAILER) {
+    console.error("[contact] CONTACT_MAILER service binding is not configured; message NOT delivered");
     return {
       ok: false,
       error: "not_configured",
@@ -247,38 +243,41 @@ export async function sendContact(raw: unknown, env: ContactEnv, opts: SendOptio
   recordSend(opts.clientKey, now);
   let response: Response;
   try {
-    response = await doFetch(env.RESEND_API_URL || DEFAULT_RESEND_URL, {
+    // Host is ignored by service bindings; only the path matters.
+    response = await env.CONTACT_MAILER.fetch("https://contact-mailer.internal/send", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.RESEND_API_KEY}`,
-        "Content-Type": "application/json",
-        "Idempotency-Key": idempotencyKey,
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        from: env.CONTACT_FROM || DEFAULT_FROM,
-        to: [to],
-        reply_to: input.email,
         subject,
         text,
+        replyTo: input.email,
+        replyToName: input.name,
+        messageId: `${idempotencyKey}@25x.codes`,
       }),
     });
   } catch (err) {
-    console.error("[contact] Resend request failed:", err);
+    console.error("[contact] contact-mailer call failed:", err);
     return {
       ok: false,
       error: "delivery_failed",
-      message: `The email provider could not be reached, so the message was NOT sent. Please retry later or email ${OWNER_EMAIL}.`,
+      message: `The mail service could not be reached, so the message was NOT sent. Please retry later or email ${OWNER_EMAIL}.`,
       fallback: MAILTO_FALLBACK,
     };
   }
 
   const bodyText = await response.text();
   if (!response.ok) {
-    console.error(`[contact] Resend error ${response.status}:`, bodyText.slice(0, 500));
+    console.error(`[contact] contact-mailer error ${response.status}:`, bodyText.slice(0, 500));
+    let code = "";
+    try {
+      code = String((JSON.parse(bodyText) as { code?: unknown; error?: unknown }).code ?? "");
+    } catch {
+      /* ignore */
+    }
     return {
       ok: false,
       error: "delivery_failed",
-      message: `The email provider rejected the message (HTTP ${response.status}), so it was NOT sent. Please email ${OWNER_EMAIL} directly.`,
+      message: `Cloudflare Email rejected the message (HTTP ${response.status}${code ? `, ${code}` : ""}), so it was NOT sent. Please email ${OWNER_EMAIL} directly.`,
       fallback: MAILTO_FALLBACK,
     };
   }
@@ -290,11 +289,11 @@ export async function sendContact(raw: unknown, env: ContactEnv, opts: SendOptio
     /* handled below */
   }
   if (!messageId) {
-    console.error("[contact] Resend returned no message id:", bodyText.slice(0, 500));
+    console.error("[contact] contact-mailer returned no message id:", bodyText.slice(0, 500));
     return {
       ok: false,
       error: "delivery_failed",
-      message: `The email provider did not confirm delivery. Please email ${OWNER_EMAIL} directly.`,
+      message: `The mail service did not confirm delivery. Please email ${OWNER_EMAIL} directly.`,
       fallback: MAILTO_FALLBACK,
     };
   }

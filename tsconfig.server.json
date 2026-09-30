@@ -1,14 +1,31 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": ["ES2022", "DOM"],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
     "module": "ESNext",
     "moduleResolution": "bundler",
     "strict": true,
     "noEmit": true,
     "skipLibCheck": true,
     "isolatedModules": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ],
+    "paths": {
+      "cloudflare:email": [
+        "./tests/stubs/cloudflare-email.ts"
+      ]
+    }
   },
-  "include": ["server", "functions/mcp", "functions/contact.ts", "tests"]
+  "include": [
+    "server",
+    "functions/mcp",
+    "functions/contact.ts",
+    "functions/guestbook.ts",
+    "workers/contact-mailer",
+    "tests"
+  ]
 }
