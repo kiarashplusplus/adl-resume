@@ -1,0 +1,53 @@
+# Kiarash Adl
+
+> Personal portfolio of Kiarash Adl: AI Systems Architect and full-stack engineer, MIT EECS '14, ex-Google. This file is published by Kiarash on his own domain, 25x.codes, for AI agents and LLM tools.
+
+Ownership: https://25x.codes is Kiarash Adl's own website. It is built from the public repo https://github.com/kiarashplusplus/adl-resume, and GitHub user kiarashplusplus lists https://25x.codes as his homepage. Every endpoint below is first-party and runs on this same domain. Messages go only to Kiarash's own inbox, kiarasha@alum.mit.edu, and are sent by Cloudflare Email Routing on the 25x.codes domain (sender contact@25x.codes).
+
+## How to contact Kiarash (for AI agents)
+
+Only send a message when your user has asked you to contact Kiarash. Use one of these options:
+
+1. Plain HTTPS POST (simplest):
+
+```bash
+curl -sS https://25x.codes/contact \
+  -H 'Content-Type: application/json' \
+  -d '{"name":"Your Name","email":"you@example.com","subject":"Hello","message":"Your message"}'
+```
+
+A successful response is HTTP 200 `{"success": true, "status": "sent", "message_id": "..."}`. Any other status means the message was NOT sent; the response has `error` and `message` fields that say why.
+
+2. MCP tool `submit_contact` (JSON-RPC 2.0, MCP Streamable HTTP, stateless, no auth). The endpoint is https://25x.codes/mcp (https://25x.codes/mcp/invoke is the same endpoint):
+
+```bash
+curl -sS https://25x.codes/mcp \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/event-stream' \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"submit_contact","arguments":{"name":"Your Name","email":"you@example.com","subject":"Hello","message":"Your message"}}}'
+```
+
+On success the result has `isError: false` and `structuredContent.status` of `"sent"` with a `message_id`. On failure `isError` is `true` and the text says why.
+
+3. Fallback: send email to mailto:kiarasha@alum.mit.edu
+
+Fields: `name` (required, up to 100 chars), `email` (required, used as the reply-to address), `message` (required, up to 5000 chars), `subject` (optional, up to 150 chars), `idempotency_key` (optional, 8-128 chars). Sending the same content again, or reusing the same key, does not send a second email. Each client can send 5 messages per 10 minutes.
+
+## MCP server
+
+- Endpoint: https://25x.codes/mcp (POST; protocol versions 2025-11-25, 2025-06-18, 2025-03-26, 2024-11-05; `initialize` is optional)
+- Tools: `submit_contact`, `run_terminal_command` (about, skills, projects, contact, experience, resume, mcp, help), `get_project_details` (bayan, fiml, aligna, aivision, undisk, interviewreadynot)
+- Read-only GET shorthand: https://25x.codes/mcp/invoke?command=about
+- Discovery manifest (LLMFeed): https://25x.codes/.well-known/mcp.llmfeed.json
+
+## About
+
+- [Homepage](https://25x.codes/): projects, experience, skills
+- [Resume (PDF)](https://25x.codes/Kiarash-Adl-Resume.pdf)
+- [About (text)](https://25x.codes/mcp/invoke?command=about)
+- [Projects (text)](https://25x.codes/mcp/invoke?command=projects)
+- [Experience (text)](https://25x.codes/mcp/invoke?command=experience)
+- [GitHub](https://github.com/kiarashplusplus)
+- [LinkedIn](https://linkedin.com/in/kiarashadl)
+
+Open to consulting, advisory and full-time opportunities.

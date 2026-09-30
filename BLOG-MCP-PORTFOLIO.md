@@ -146,7 +146,7 @@ I actually receive these emails. It's been tested and verified.
 │                                                              │
 │  run_terminal_command → Static content (about, skills, etc.) │
 │  get_project_details  → Project data with metrics            │
-│  submit_contact       → Resend API → Email to inbox          │
+│  submit_contact       → CF Email Routing → Email to inbox    │
 └─────────────────────────────────────────────────────────────┘
 ```
 

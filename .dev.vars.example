@@ -1,8 +1,7 @@
-# Environment variables for local development
-# Copy this to .dev.vars and fill in your actual values
+# Local variables for `wrangler pages dev` (copy to .dev.vars; never commit it).
+# Email is sent by the contact-mailer Worker through the CONTACT_MAILER service
+# binding (see DEPLOYMENT.md). Without that binding, /contact and submit_contact
+# return an explicit "not sent" error.
 
-# Get your API key from https://resend.com/api-keys
-RESEND_API_KEY=re_your_api_key_here
-
-# Email address where contact form submissions will be sent
-CONTACT_EMAIL=kiarasha@alum.mit.edu
+# Set to 1 to validate submissions without sending email
+# CONTACT_DRY_RUN=1

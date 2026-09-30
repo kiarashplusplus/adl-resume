@@ -1,0 +1,22 @@
+// Deploy: npx wrangler deploy -c workers/contact-mailer/wrangler.jsonc
+// Prerequisites (Cloudflare dashboard, zone 25x.codes):
+//   - Email Routing enabled
+//   - kiarasha@alum.mit.edu added and VERIFIED as a destination address
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "adl-resume-contact-mailer",
+  "main": "index.ts",
+  "compatibility_date": "2026-05-14",
+  // No public URL: only reachable through the Pages service binding CONTACT_MAILER.
+  "workers_dev": false,
+  "preview_urls": false,
+  "send_email": [
+    { "name": "SEND_EMAIL", "destination_address": "kiarasha@alum.mit.edu" }
+  ],
+  "vars": {
+    "CONTACT_TO": "kiarasha@alum.mit.edu",
+    "CONTACT_FROM": "contact@25x.codes",
+    "CONTACT_FROM_NAME": "25x.codes contact"
+  },
+  "observability": { "enabled": true }
+}

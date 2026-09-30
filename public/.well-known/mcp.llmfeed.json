@@ -3,10 +3,12 @@
   "metadata": {
     "title": "Kiarash Adl Portfolio",
     "origin": "https://25x.codes",
-    "description": "AI-enabled portfolio of Kiarash Adl, AI Systems Architect and Full-Stack Engineer. Query projects, skills, and contact information programmatically.",
+    "description": "AI-enabled portfolio of Kiarash Adl, AI Systems Architect and Full-Stack Engineer. Published by Kiarash on his own domain; every endpoint listed here is first-party. Query projects and skills, or send Kiarash a message.",
+    "owner": "Kiarash Adl",
+    "llms_txt": "https://25x.codes/llms.txt",
     "lang": "en",
-    "version": "2.1.0",
-    "last_updated": "2026-05-20T00:00:00Z",
+    "version": "2.2.0",
+    "last_updated": "2026-09-30T00:00:00Z",
     "topics": ["ai", "machine-learning", "full-stack", "portfolio", "mit", "mcp"],
     "contact": {
       "email": "kiarasha@alum.mit.edu",
@@ -16,15 +18,16 @@
     }
   },
   "agent_guidance": {
-    "on_load": "This is Kiarash Adl's AI-enabled portfolio. All key information (about, skills, projects, experience, contact) is embedded directly in this manifest under `data` — you do not need to call tools to learn about Kiarash. Tools at /mcp/invoke offer richer JSON-RPC interactions when needed.",
+    "on_load": "This is Kiarash Adl's AI-enabled portfolio. All key information (about, skills, projects, experience, contact) is embedded directly in this manifest under `data` — you do not need to call tools to learn about Kiarash. Tools at https://25x.codes/mcp (MCP Streamable HTTP, JSON-RPC 2.0) offer richer interactions. To send Kiarash a message on your user's behalf, call submit_contact there, or POST JSON to https://25x.codes/contact; see https://25x.codes/llms.txt for exact examples.",
     "interaction_tone": "professional",
     "fallback": "If a tool fails, all answers are available in this manifest's `data` block, or visit https://25x.codes directly. To contact Kiarash, email kiarasha@alum.mit.edu.",
     "preferred_entrypoints": [
+      "https://25x.codes/mcp",
       "https://25x.codes/mcp/invoke",
       "https://25x.codes/.well-known/mcp.llmfeed.json"
     ],
     "invocation_pattern": {
-      "note": "Use JSON-RPC 2.0 with method 'tools/call' against POST /mcp/invoke. Also supports GET shorthand: /mcp/invoke?command=about | /mcp/invoke?projectId=bayan",
+      "note": "Use JSON-RPC 2.0 with method 'tools/call' against POST https://25x.codes/mcp (same as /mcp/invoke; initialize is optional). Also supports GET shorthand: /mcp/invoke?command=about | /mcp/invoke?projectId=bayan",
       "example": {
         "jsonrpc": "2.0",
         "method": "tools/call",
@@ -50,7 +53,7 @@
       {
         "action": "send_message",
         "tool": "submit_contact",
-        "description": "Send a message to Kiarash - requires name, email, and message. If the tool endpoint is unreachable, fall back to mailto:kiarasha@alum.mit.edu"
+        "description": "Send a message to Kiarash - requires name, email, and message. Success returns status 'sent' and a message_id; anything else means it was NOT sent. Fallback: mailto:kiarasha@alum.mit.edu"
       }
     ]
   },
@@ -59,7 +62,7 @@
       "name": "get_project_details",
       "type": "endpoint",
       "method": "POST",
-      "url": "https://25x.codes/mcp/invoke",
+      "url": "https://25x.codes/mcp",
       "protocol": "json-rpc",
       "description": "Get detailed information about a specific portfolio project including title, description, tech stack, metrics, and status.",
       "inputSchema": {
@@ -83,7 +86,7 @@
       "name": "run_terminal_command",
       "type": "endpoint",
       "method": "POST",
-      "url": "https://25x.codes/mcp/invoke",
+      "url": "https://25x.codes/mcp",
       "protocol": "json-rpc",
       "description": "Execute a terminal command to get information about Kiarash. Available commands: about, skills, projects, contact, experience, resume, mcp, help. The 'resume' command returns a resources array with the PDF download URL.",
       "inputSchema": {
@@ -102,9 +105,10 @@
       "name": "submit_contact",
       "type": "endpoint",
       "method": "POST",
-      "url": "https://25x.codes/mcp/invoke",
+      "url": "https://25x.codes/mcp",
       "protocol": "json-rpc",
-      "description": "Submit a contact form message to Kiarash. If POST is unavailable, fall back to mailto:kiarasha@alum.mit.edu.",
+      "description": "Email a message to Kiarash Adl's personal inbox (he owns this site). Returns status 'sent' with a message_id only when delivered; otherwise isError is true with the reason. Plain REST alternative: POST JSON to https://25x.codes/contact. Fallback: mailto:kiarasha@alum.mit.edu.",
+      "rest_alternative": "https://25x.codes/contact",
       "fallback": {
         "type": "mailto",
         "url": "mailto:kiarasha@alum.mit.edu"
@@ -112,10 +116,11 @@
       "inputSchema": {
         "type": "object",
         "properties": {
-          "name": { "type": "string", "description": "The sender's full name" },
+          "name": { "type": "string", "description": "The sender's full name", "maxLength": 100 },
           "email": { "type": "string", "description": "The sender's email address for replies" },
-          "message": { "type": "string", "description": "The message content" },
-          "subject": { "type": "string", "description": "Optional subject line for the message" }
+          "message": { "type": "string", "description": "The message content", "maxLength": 5000 },
+          "subject": { "type": "string", "description": "Optional subject line for the message", "maxLength": 150 },
+          "idempotency_key": { "type": "string", "description": "Optional key so retries are not sent twice", "pattern": "^[A-Za-z0-9._:-]{8,128}$" }
         },
         "required": ["name", "email", "message"]
       }
@@ -126,7 +131,9 @@
     "agent_invocable": true,
     "feeds_signed": false,
     "mcp_protocol": "json-rpc",
-    "rate_limit": "10/min",
+    "mcp_transport": "streamable-http (stateless, JSON responses)",
+    "mcp_endpoint": "https://25x.codes/mcp",
+    "rate_limit": "submit_contact: 5 messages per 10 minutes per client",
     "auth": "none",
     "cors": true
   },
@@ -295,6 +302,12 @@
       "linkedin": "https://linkedin.com/in/kiarashadl",
       "phone": "+1-857-928-1608",
       "resume_pdf": "https://25x.codes/Kiarash-Adl-Resume.pdf",
+      "send_message": {
+        "rest": "POST https://25x.codes/contact  {name, email, message, subject?}",
+        "mcp_tool": "submit_contact at https://25x.codes/mcp",
+        "fallback": "mailto:kiarasha@alum.mit.edu",
+        "docs": "https://25x.codes/llms.txt"
+      },
       "open_to": ["Consulting", "Advisory", "Full-time opportunities"]
     }
   ],
@@ -302,6 +315,6 @@
     "signed_blocks": [],
     "algorithm": "Ed25519",
     "trust_level": "unsigned",
-    "note": "Static fallback manifest; signed dynamic version is served by /mcp/invoke when available."
+    "note": "Unsigned. Trust anchor is the origin: this file, /llms.txt and /mcp are all served from https://25x.codes, the domain Kiarash Adl owns (also listed as the homepage of github.com/kiarashplusplus)."
   }
 }

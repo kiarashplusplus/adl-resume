@@ -10,7 +10,9 @@
         "lint": "eslint .",
         "optimize": "vite optimize",
         "optimize:images": "node scripts/optimize-images.mjs",
-        "preview": "vite preview"
+        "preview": "vite preview",
+        "typecheck": "tsc -p tsconfig.server.json",
+        "test": "vitest run"
     },
     "dependencies": {
         "@preact/signals": "^2.5.1",
@@ -47,6 +49,7 @@
         "typescript": "~5.9.3",
         "typescript-eslint": "^8.48.0",
         "vite": "^6.4.1",
+        "vitest": "^3.2.7",
         "wrangler": "^4.90.0"
     },
     "workspaces": {
