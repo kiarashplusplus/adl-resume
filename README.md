@@ -27,12 +27,15 @@ To update the resume, simply replace that single file and redeploy. No code chan
 
 ```bash
 cp /path/to/new-resume.pdf public/Kiarash-Adl-Resume.pdf
-npm run build   # optional, just to sanity-check
+npm run build
 git commit -am "Update resume PDF"
-git push        # Cloudflare Pages auto-deploys
+git push
+npx wrangler pages deploy dist --project-name 25x-codes --branch main   # Pages has no Git integration; pushing alone does not deploy
 ```
 
-> Do **not** import the PDF from `src/` — that path goes through Vite's asset pipeline and gets a content hash ## 🤖 MCP Integration / contacting Kiarash (for AI agents)
+> Do **not** import the PDF from `src/` — that path goes through Vite's asset pipeline and gets a content hash like `Kiarash-Adl-Resume-20251129-DFXsl4HJ.pdf`, which changes on every content update and breaks any link that points at it.
+
+## 🤖 MCP Integration / contacting Kiarash (for AI agents)
 
 Start at **https://25x.codes/llms.txt**. It is the plain-text guide for agents, including how to send Kiarash a message.
 
