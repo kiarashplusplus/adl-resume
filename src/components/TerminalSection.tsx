@@ -95,7 +95,7 @@ const commands: Record<string, string[]> = {
     "   Tech: Python, MCP, AI Orchestration",
     "",
     "3. Aligna (www.align-a.com)",
-    "   Conversational AI Recruiter",
+    "   Conversational AI Recruiter, grew into InterviewReadyNot",
     "   Voice interviews via LiveKit",
     "   Tech: Next.js, Azure OpenAI, Docker",
     "",
@@ -103,6 +103,11 @@ const commands: Record<string, string[]> = {
     "   Undo-first versioned file workspace for AI agents",
     "   25 MCP tools | <50ms restore | immutable writes",
     "   Tech: MCP, Cloudflare Workers, Durable Objects",
+    "",
+    "5. InterviewReadyNot (interviewreadynot.com)",
+    "   Free AI mock interview judged by five independent AI agents",
+    "   6 questions | 5 judges x 3 runs | 0 approved so far",
+    "   Tech: Cloudflare Workers, Azure AI Foundry",
     "",
     "Tip: Try 'projects --latest' for current work"
   ],
@@ -125,7 +130,11 @@ const commands: Record<string, string[]> = {
     "",
     "Undisk MCP (mcp.undisk.app)",
     "  Undo-first file memory for AI agents",
-    "  Status: Live"
+    "  Status: Live",
+    "",
+    "InterviewReadyNot (interviewreadynot.com)",
+    "  Free AI mock interview, five independent AI judges",
+    "  Status: Live, nobody has passed yet"
   ],
   contact: [
     "Contact Information",
@@ -645,7 +654,8 @@ function TerminalSEOContent() {
         <ul role="list">
           <li>Bayan (trybayan.com): Bilingual Farsi-English classical Persian poetry analysis. 13,828 poems, 33,640 dictionary entries, 106,037 searchable verses. Tech: Swift, SwiftUI, CoreData, NLP.</li>
           <li>Financial Intelligence Meta-Layer (FIML): AI-native MCP server, 32K+ LOC, 1,403 tests, 100% pass rate. Tech: Python, MCP, AI Orchestration.</li>
-          <li>Aligna (align-a.com): Conversational AI Recruiter with voice interviews via LiveKit. Tech: Next.js, Azure OpenAI, Docker.</li>
+          <li>InterviewReadyNot (interviewreadynot.com): Free AI mock interview. Six common interview questions answered out loud, scored by five independent AI judges from Anthropic, OpenAI and xAI. Nobody has passed yet.</li>
+          <li>Aligna (align-a.com): Conversational AI Recruiter with voice interviews via LiveKit, since grown into InterviewReadyNot. Tech: Next.js, Azure OpenAI, Docker.</li>
           <li>Undisk MCP (mcp.undisk.app): Undo-first versioned file workspace for AI agents with immutable writes, surgical restore, and tamper-evident audit trail. Tech: MCP, Cloudflare Workers, Durable Objects.</li>
         </ul>
       </section>
@@ -748,7 +758,7 @@ function DesktopTerminal() {
           "  POST https://25x.codes/mcp/invoke",
           "",
           "Available Tools:",
-          "  • get_project_details  Get project info (bayan, fiml, aligna, aivision, undisk)",
+          "  • get_project_details  Get project info (bayan, fiml, aligna, aivision, undisk, interviewreadynot)",
           "  • run_terminal_command Run: about, skills, projects, contact, experience",
           "",
           "Example:",

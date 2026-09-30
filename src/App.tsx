@@ -909,6 +909,67 @@ function App() {
             
             <div className="space-y-6" role="list" aria-label="Featured projects">
               <ScrollReveal className="scroll-reveal-child">
+                <article className="group relative project" itemScope itemType="https://schema.org/WebApplication">
+                  {/* Gradient glow on hover */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-rose-500 via-indigo-500 to-rose-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
+
+                  <Card className="relative p-6 md:p-8 hover:shadow-xl transition-all duration-500 hover:border-rose-500/40 bg-card overflow-hidden">
+                    {/* Decorative corner accent */}
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-rose-500/10 to-transparent rounded-bl-full" />
+
+                    <div className="flex flex-col md:flex-row md:items-start gap-6 relative z-10">
+                      <div className="flex-1">
+                        <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mb-3">
+                          <h3 className="text-xl md:text-2xl font-bold group-hover:text-rose-500 transition-colors" itemProp="name">
+                            <a href="https://interviewreadynot.com/" target="_blank" rel="noopener" className="hover:underline">InterviewReadyNot</a>
+                          </h3>
+                          <Badge variant="outline" className="border-rose-500/50 text-rose-600 bg-rose-500/10 text-xs" itemProp="applicationCategory">AI Mock Interview</Badge>
+                          <Badge variant="outline" className="border-emerald-500/50 text-emerald-600 bg-emerald-500/10 text-xs">Live</Badge>
+                        </div>
+                        <p className="text-foreground/80 mb-4 leading-relaxed" itemProp="description">
+                          A free AI mock interview I cofounded with Jinane Amal. Candidates answer six common interview questions out loud, and five independent AI judges from Anthropic, OpenAI and xAI score every answer without seeing each other&apos;s verdicts. Everyone gets a coach report; a pass needs a unanimous yes, and nobody has passed yet.
+                        </p>
+                        <ul className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4" role="list" aria-label="Project metrics">
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-rose-500/30 transition-colors">
+                            <div className="text-xl font-bold text-rose-500">5</div>
+                            <div className="text-xs text-muted-foreground">Independent Judges</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-rose-500/30 transition-colors">
+                            <div className="text-xl font-bold text-rose-500">3</div>
+                            <div className="text-xs text-muted-foreground">Runs per Judge</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-rose-500/30 transition-colors">
+                            <div className="text-xl font-bold text-rose-500">6</div>
+                            <div className="text-xs text-muted-foreground">Questions</div>
+                          </li>
+                          <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-rose-500/30 transition-colors">
+                            <div className="text-xl font-bold text-rose-500">0</div>
+                            <div className="text-xs text-muted-foreground">Approved So Far</div>
+                          </li>
+                        </ul>
+                        <ul className="flex flex-wrap gap-1.5 mb-3" role="list" aria-label="Technologies used">
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Cloudflare Workers</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Queues</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Azure AI Foundry</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">Claude · GPT · Grok</Badge></li>
+                          <li><Badge variant="secondary" className="text-xs bg-secondary/50">three.js</Badge></li>
+                        </ul>
+                        <div className="flex items-center gap-2 p-2 rounded-lg bg-rose-500/5 border border-rose-500/20 text-xs">
+                          <span className="text-rose-500" aria-hidden="true">✓</span>
+                          <span className="text-muted-foreground"><strong className="font-medium text-foreground">Impact:</strong> Free, honest interview practice against a public bar nobody has cleared yet. Grew out of Aligna.</span>
+                        </div>
+                      </div>
+                      <nav className="flex flex-row gap-2" aria-label="Project links">
+                        <a href="https://interviewreadynot.com/" target="_blank" rel="noopener" className="flex-shrink-0 min-h-[44px] min-w-[44px] p-3 rounded-xl bg-muted/80 hover:bg-rose-500 hover:text-white transition-all duration-300 flex items-center justify-center group/btn hover:shadow-lg hover:shadow-rose-500/20 hover:-translate-y-0.5" aria-label="Visit InterviewReadyNot at interviewreadynot.com" itemProp="url">
+                          <Link className="h-5 w-5 group-hover/btn:scale-110 transition-transform" />
+                        </a>
+                      </nav>
+                    </div>
+                  </Card>
+                </article>
+              </ScrollReveal>
+
+              <ScrollReveal className="scroll-reveal-child">
                 <article className="group relative project" itemScope itemType="https://schema.org/MobileApplication">
                   {/* Gradient glow on hover */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-500 rounded-2xl opacity-0 group-hover:opacity-30 blur-lg transition-all duration-500" />
@@ -1116,7 +1177,8 @@ function App() {
                           <Badge variant="outline" className="border-blue-500/50 text-blue-600 bg-blue-500/10 text-xs" itemProp="applicationCategory">SaaS Platform</Badge>
                         </div>
                         <p className="text-foreground/80 mb-4 leading-relaxed" itemProp="description">
-                          Conversational AI recruiter that schedules and conducts voice interviews via LiveKit, transcribes with Azure OpenAI, and performs automated candidate-job matching.
+                          Conversational AI recruiter that scheduled and conducted voice interviews via LiveKit, transcribed with Azure OpenAI, and matched candidates to jobs. It has since grown into{" "}
+                          <a href="https://interviewreadynot.com/" target="_blank" rel="noopener" className="underline hover:text-primary">InterviewReadyNot</a>.
                         </p>
                         <ul className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4" role="list" aria-label="Project features">
                           <li className="text-center p-3 bg-gradient-to-br from-muted/80 to-muted/40 rounded-xl border border-border/50 group-hover:border-blue-500/30 transition-colors">

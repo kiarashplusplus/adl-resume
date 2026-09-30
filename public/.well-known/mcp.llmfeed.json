@@ -45,7 +45,7 @@
       {
         "action": "project_details",
         "tool": "get_project_details",
-        "description": "Get details about specific projects: bayan, fiml, aligna, aivision, undisk"
+        "description": "Get details about specific projects: bayan, fiml, aligna, aivision, undisk, interviewreadynot"
       },
       {
         "action": "send_message",
@@ -68,7 +68,7 @@
           "projectId": {
             "type": "string",
             "description": "The project ID to retrieve",
-            "enum": ["bayan", "fiml", "aligna", "aivision", "undisk"]
+            "enum": ["bayan", "fiml", "aligna", "aivision", "undisk", "interviewreadynot"]
           },
           "includeStack": {
             "type": "boolean",
@@ -214,11 +214,29 @@
           "impact": "Reduces financial data integration time by 70%"
         },
         {
+          "id": "interviewreadynot",
+          "title": "InterviewReadyNot",
+          "shortDescription": "Free AI mock interview judged by five independent AI agents",
+          "description": "Public AI interview challenge, cofounded with Jinane Amal. Candidates answer six common interview questions out loud; five independent AI judges from Anthropic, OpenAI and xAI score every answer, and everyone gets a coach report. A pass needs a unanimous yes, and nobody has passed yet. Grew out of Aligna.",
+          "status": "live",
+          "category": "startup",
+          "stack": ["Cloudflare Workers", "Queues", "Azure AI Foundry", "Claude, GPT, Grok", "three.js"],
+          "metrics": {
+            "Independent Judges": "5",
+            "Runs per Judge": "3",
+            "Interview Questions": "6",
+            "Approved So Far": "0"
+          },
+          "website": "https://interviewreadynot.com/",
+          "demo": "https://interviewreadynot.com/interview",
+          "impact": "Free, honest interview practice against a public bar nobody has cleared yet"
+        },
+        {
           "id": "aligna",
           "title": "Aligna",
           "shortDescription": "Conversational AI recruiter with voice interviews",
-          "description": "Conversational AI recruiter that schedules and conducts voice interviews via LiveKit, transcribes with Azure OpenAI, and performs automated candidate-job matching with full observability.",
-          "status": "live",
+          "description": "Conversational AI recruiter that scheduled and conducted voice interviews via LiveKit, transcribed with Azure OpenAI, and matched candidates to jobs with full observability. It has since grown into InterviewReadyNot.",
+          "status": "completed",
           "category": "saas",
           "stack": ["Next.js", "LiveKit", "Azure OpenAI", "PostgreSQL", "Docker"],
           "website": "https://www.align-a.com/",

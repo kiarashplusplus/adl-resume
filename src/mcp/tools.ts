@@ -32,7 +32,7 @@ export interface MCPTool {
 export const getProjectDetailsSchema = z.object({
   projectId: z
     .string()
-    .describe("The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'undisk')"),
+    .describe("The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'undisk', 'interviewreadynot')"),
   includeStack: z
     .boolean()
     .optional()
@@ -101,7 +101,7 @@ AI/ML:
    - Tech: Python, MCP, AI Orchestration
 
 3. Aligna (www.align-a.com)
-   - Conversational AI Recruiter
+   - Conversational AI Recruiter, now grown into InterviewReadyNot
    - Voice interviews via LiveKit
    - Tech: Next.js, Azure OpenAI, Docker
 
@@ -112,7 +112,12 @@ AI/ML:
 
 5. AI Vision
    - Patent-pending AI solutions for home services
-   - Status: App Store Live`,
+   - Status: App Store Live
+
+6. InterviewReadyNot (interviewreadynot.com)
+   - Free AI mock interview judged by five independent AI agents
+   - 6 questions | 5 judges x 3 runs | 0 approved so far
+   - Tech: Cloudflare Workers, Azure AI Foundry (Claude, GPT, Grok)`,
 
   contact: `Contact Information:
 
@@ -317,8 +322,8 @@ const jsonSchemas: Record<string, object> = {
     properties: {
       projectId: {
         type: "string",
-        description: "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'undisk')",
-        enum: ["bayan", "fiml", "aligna", "aivision", "undisk"]
+        description: "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'undisk', 'interviewreadynot')",
+        enum: ["bayan", "fiml", "aligna", "aivision", "undisk", "interviewreadynot"]
       },
       includeStack: {
         type: "boolean",

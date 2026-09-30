@@ -66,7 +66,7 @@ const mcpManifest = {
       {
         "action": "project_details",
         "tool": "get_project_details",
-        "description": "Get details about specific projects: bayan, fiml, aligna, aivision"
+        "description": "Get details about specific projects: bayan, fiml, aligna, aivision, interviewreadynot"
       }
     ]
   },
@@ -83,8 +83,8 @@ const mcpManifest = {
         "properties": {
           "projectId": {
             "type": "string",
-            "description": "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision')",
-            "enum": ["bayan", "fiml", "aligna", "aivision"]
+            "description": "The project ID to retrieve (e.g., 'bayan', 'fiml', 'aligna', 'aivision', 'interviewreadynot')",
+            "enum": ["bayan", "fiml", "aligna", "aivision", "interviewreadynot"]
           },
           "includeStack": {
             "type": "boolean",
