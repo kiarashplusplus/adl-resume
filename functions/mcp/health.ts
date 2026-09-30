@@ -37,18 +37,21 @@ export const onRequest = async (context: { request: Request; env: Env }): Promis
   const health = {
     status: "healthy",
     service: "kiarash-portfolio-mcp",
-    version: "1.0.0",
+    version: "1.1.0",
     timestamp: new Date().toISOString(),
     uptime: "edge-function", // Cloudflare functions are stateless
     endpoints: {
       discovery: "/.well-known/mcp.llmfeed.json",
+      mcp: "/mcp",
       invoke: "/mcp/invoke",
+      contact: "/contact",
+      llms_txt: "/llms.txt",
       health: "/mcp/health"
     },
     capabilities: {
       tools: ["get_project_details", "run_terminal_command", "submit_contact"],
-      protocol: "json-rpc",
-      signed: true
+      protocol: "mcp-streamable-http (stateless JSON-RPC 2.0)",
+      signed: false
     },
     latency_ms: Date.now() - startTime
   };

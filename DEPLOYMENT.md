@@ -44,7 +44,13 @@ This portfolio site is ready to deploy on Cloudflare Pages with a serverless con
 2. Add the following variables for **Production**:
    - `RESEND_API_KEY`: Your Resend API key (from Step 1)
    - `CONTACT_EMAIL`: `kiarasha@alum.mit.edu`
+   - `CONTACT_FROM` (recommended): a sender on a domain verified in Resend, e.g. `25x.codes <contact@25x.codes>`.
+     Without it the shared `onboarding@resend.dev` sender is used, which Resend only delivers to the Resend account owner's address.
 3. Click **Save**
+
+`RESEND_API_KEY` is used by both the website form (`POST /contact`) and the MCP tool
+`submit_contact` (`POST /mcp`, same as `/mcp/invoke`). If it is missing, both return an explicit
+"not sent" error (HTTP 503 / `isError: true`); they never report a fake success.
 
 ## Step 4: Redeploy
 
@@ -102,10 +108,7 @@ For production, you should verify your own domain in Resend:
 3. Enter your domain (e.g., `kiarashadl.com`)
 4. Add the DNS records shown (MX, TXT, CNAME)
 5. Wait for verification (~24 hours)
-6. Update the `from` field in `/functions/contact.ts`:
-   ```typescript
-   from: 'Portfolio <noreply@kiarashadl.com>'
-   ```
+6. Set the `CONTACT_FROM` environment variable, e.g. `25x.codes <contact@25x.codes>`
 
 ## Monitoring
 

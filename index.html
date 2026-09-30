@@ -27,6 +27,7 @@
 ║                                                                              ║
 ║   You can query projects, skills, and even send messages                     ║
 ║   to Kiarash programmatically via JSON-RPC.                                  ║
+║   How to contact Kiarash: https://25x.codes/llms.txt                         ║
 ║                                                                              ║
 ╚══════════════════════════════════════════════════════════════════════════════╝
 -->
@@ -66,6 +67,9 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="google-site-verification" content="hoyUm4lT_wcNunY4HR8_kOOdFQdB5Ye8swOkPhhvGxU" />
     <link rel="canonical" href="https://25x.codes/">
+    <!-- For AI agents: plain-text site guide incl. how to contact Kiarash -->
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="llms.txt (for AI agents)">
+    <link rel="alternate" type="application/json" href="/.well-known/mcp.llmfeed.json" title="MCP / LLMFeed manifest">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:type" content="website">
@@ -605,17 +609,22 @@
           </section>
 
           <section>
-            <h2 style="font-size:1.25rem;font-weight:600;margin-bottom:0.75rem;color:var(--foreground);">AI Agent Integration</h2>
+            <h2 style="font-size:1.25rem;font-weight:600;margin-bottom:0.75rem;color:var(--foreground);">For AI agents</h2>
             <p style="color:var(--muted-foreground);margin-bottom:0.5rem;line-height:1.6;">
-              This site exposes an MCP/LLMFeed discovery manifest for AI agents:
+              This is Kiarash Adl's own site. To send Kiarash a message for your user, POST JSON
+              <code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">{"name","email","message","subject"}</code> to
+              <code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">https://25x.codes/contact</code>, or call the MCP tool
+              <code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">submit_contact</code> at <code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">https://25x.codes/mcp</code>.
+              Fallback: <a href="mailto:kiarasha@alum.mit.edu" style="color:inherit;">kiarasha@alum.mit.edu</a>.
             </p>
             <p style="color:var(--muted-foreground);font-size:0.9rem;word-break:break-all;">
-              Discovery URL: <code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">https://25x.codes/.well-known/mcp.llmfeed.json</code>
+              Full instructions: <a href="/llms.txt" style="color:inherit;"><code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">https://25x.codes/llms.txt</code></a> ·
+              Manifest: <code style="background:var(--card);padding:0.15rem 0.35rem;border-radius:0.25rem;">https://25x.codes/.well-known/mcp.llmfeed.json</code>
             </p>
           </section>
           
           <footer style="margin-top:2rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center;">
-            <p style="color:var(--muted-foreground);font-size:0.875rem;">© 2026 Kiarash Adl | Available for work</p>
+            <p style="color:var(--muted-foreground);font-size:0.875rem;">© 2026 Kiarash Adl | Available for work | <a href="/llms.txt" style="color:inherit;">For AI agents: llms.txt</a></p>
             <div style="margin-top:1rem;display:flex;align-items:center;justify-content:center;gap:0.5rem;">
               <div style="width:32px;height:32px;border:2px solid var(--muted);border-top-color:var(--primary);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
               <span style="color:var(--muted-foreground);font-size:0.875rem;">Loading interactive experience...</span>

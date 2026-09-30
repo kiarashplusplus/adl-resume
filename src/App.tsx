@@ -354,7 +354,7 @@ function App() {
       const result = await response.json()
 
       if (!response.ok) {
-        throw new Error(result.error || 'Failed to send message')
+        throw new Error(result.message || result.error || 'Failed to send message')
       }
 
       playSuccess()
@@ -1711,6 +1711,9 @@ function App() {
             {/* Bottom info */}
             <div className="flex flex-col sm:flex-row items-center gap-3 text-sm text-muted-foreground">
               <p>© 2026 Kiarash Adl</p>
+              <a href="/llms.txt" className="hover:text-primary transition-colors" title="How AI agents can reach Kiarash: POST /contact or MCP submit_contact at /mcp">
+                For AI agents: llms.txt
+              </a>
               <span className="hidden sm:flex items-center gap-1.5">
                 Press <kbd className="px-1.5 py-0.5 text-xs font-mono bg-muted rounded border border-border">?</kbd> for shortcuts
               </span>

@@ -1,4 +1,8 @@
 User-agent: *
 Allow: /
 
+# AI agents: https://25x.codes/llms.txt explains this site, and how to
+# contact Kiarash Adl (the site owner) via POST /contact or the MCP endpoint
+# at https://25x.codes/mcp. Manifest: /.well-known/mcp.llmfeed.json
+
 Sitemap: https://25x.codes/sitemap.xml

@@ -1,8 +1,15 @@
-# Environment variables for local development
-# Copy this to .dev.vars and fill in your actual values
+# Environment variables for local development (wrangler pages dev reads .dev.vars)
+# Copy this to .dev.vars and fill in your actual values. Never commit .dev.vars.
 
 # Get your API key from https://resend.com/api-keys
 RESEND_API_KEY=re_your_api_key_here
 
-# Email address where contact form submissions will be sent
+# Inbox that receives contact form + MCP submit_contact messages
 CONTACT_EMAIL=kiarasha@alum.mit.edu
+
+# Verified Resend sender. Without it, Resend's shared test sender
+# (onboarding@resend.dev) is used, which only delivers to the Resend account owner.
+# CONTACT_FROM=25x.codes <contact@25x.codes>
+
+# Set to 1 to validate submissions without sending email (local testing)
+# CONTACT_DRY_RUN=1

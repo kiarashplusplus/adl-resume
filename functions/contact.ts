@@ -1,136 +1,65 @@
-// Cloudflare Pages Function for handling contact form submissions
-// This runs as a serverless function on Cloudflare's edge network
+/**
+ * POST /contact — contact form + plain REST route for agents.
+ * Body: { "name": "...", "email": "...", "message": "...", "subject"?: "...", "idempotency_key"?: "..." }
+ * Returns 200 { success: true, status: "sent", message_id } only when the email
+ * provider accepted the message; otherwise a 4xx/5xx with { success: false, error, message }.
+ * Delivery lives in server/mcp/contact.ts (shared with the MCP submit_contact tool).
+ */
+import { clientKeyFrom, describeResult, MAILTO_FALLBACK, sendContact, type ContactEnv } from "../server/mcp/contact";
 
-interface ContactFormData {
-  name: string;
-  email: string;
-  subject?: string;
-  message: string;
-}
+const CORS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
 
-interface Env {
-  RESEND_API_KEY: string;
-  CONTACT_EMAIL: string;
-}
+const json = (body: unknown, status = 200, extra: Record<string, string> = {}) =>
+  new Response(JSON.stringify(body, null, 2), {
+    status,
+    headers: { ...CORS, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", ...extra },
+  });
 
-type PagesFunction<Env = unknown> = (context: EventContext<Env, any, Record<string, unknown>>) => Response | Promise<Response>;
+const STATUS: Record<string, number> = { invalid_input: 400, rate_limited: 429, not_configured: 503, delivery_failed: 502 };
 
-interface EventContext<Env = unknown, P extends string = any, Data extends Record<string, unknown> = Record<string, unknown>> {
-  request: Request;
-  functionPath: string;
-  waitUntil: (promise: Promise<any>) => void;
-  passThroughOnException: () => void;
-  next: (input?: Request | string, init?: RequestInit) => Promise<Response>;
-  env: Env;
-  params: Record<P, string>;
-  data: Data;
-}
+type Ctx = { request: Request; env: ContactEnv };
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
-  // CORS headers
-  const corsHeaders = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-  };
+export const onRequestOptions = () => new Response(null, { status: 204, headers: CORS });
 
-  // Handle CORS preflight
-  if (context.request.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
-  }
+export const onRequestGet = () =>
+  json({
+    endpoint: "https://25x.codes/contact",
+    owner: "Kiarash Adl (this is his own site)",
+    method: "POST",
+    content_type: "application/json",
+    body: { name: "required", email: "required (reply-to)", message: "required, max 5000 chars", subject: "optional", idempotency_key: "optional" },
+    mcp_alternative: "tools/call submit_contact at https://25x.codes/mcp",
+    docs: "https://25x.codes/llms.txt",
+    fallback: MAILTO_FALLBACK,
+  });
 
+export const onRequestPost = async ({ request, env }: Ctx): Promise<Response> => {
+  let body: Record<string, unknown>;
   try {
-    // Parse form data
-    const formData: ContactFormData = await context.request.json();
-
-    // Validate required fields
-    if (!formData.name || !formData.email || !formData.message) {
-      return new Response(
-        JSON.stringify({ error: 'Missing required fields' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      );
-    }
-
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      return new Response(
-        JSON.stringify({ error: 'Invalid email address' }),
-        { 
-          status: 400, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      );
-    }
-
-    // Send email via Resend
-    const resendResponse = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${context.env.RESEND_API_KEY}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Portfolio Contact <onboarding@resend.dev>', // Replace with your verified domain
-        to: context.env.CONTACT_EMAIL || 'kiarasha@alum.mit.edu',
-        reply_to: formData.email,
-        subject: formData.subject || `Portfolio Contact from ${formData.name}`,
-        html: `
-          <h2>New Contact Form Submission</h2>
-          <p><strong>Name:</strong> ${formData.name}</p>
-          <p><strong>Email:</strong> ${formData.email}</p>
-          <p><strong>Subject:</strong> ${formData.subject || 'N/A'}</p>
-          <h3>Message:</h3>
-          <p>${formData.message.replace(/\n/g, '<br>')}</p>
-        `,
-        text: `
-Name: ${formData.name}
-Email: ${formData.email}
-Subject: ${formData.subject || 'N/A'}
-
-Message:
-${formData.message}
-        `,
-      }),
-    });
-
-    if (!resendResponse.ok) {
-      const error = await resendResponse.text();
-      console.error('Resend API error:', error);
-      return new Response(
-        JSON.stringify({ error: 'Failed to send email' }),
-        { 
-          status: 500, 
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        }
-      );
-    }
-
-    const result = await resendResponse.json();
-
-    return new Response(
-      JSON.stringify({ 
-        success: true, 
-        message: 'Email sent successfully',
-        id: result.id 
-      }),
-      { 
-        status: 200, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    );
-
-  } catch (error) {
-    console.error('Contact form error:', error);
-    return new Response(
-      JSON.stringify({ error: 'Internal server error' }),
-      { 
-        status: 500, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      }
-    );
+    body = (await request.json()) as Record<string, unknown>;
+  } catch {
+    return json({ success: false, error: "invalid_input", message: "Body must be JSON" }, 400);
   }
+
+  const channel = request.headers.get("Origin") === "https://25x.codes" ? "form" : "rest";
+  const result = await sendContact(body, env, {
+    channel,
+    clientKey: clientKeyFrom(request),
+    userAgent: request.headers.get("User-Agent") ?? undefined,
+  });
+
+  if (result.ok) {
+    const { ok: _ok, ...rest } = result;
+    return json({ success: true, ...rest, message: describeResult(result) });
+  }
+  const { ok: _ok, error, ...rest } = result;
+  return json(
+    { success: false, error, ...rest },
+    STATUS[error] ?? 500,
+    result.retry_after_seconds ? { "Retry-After": String(result.retry_after_seconds) } : {}
+  );
 };
