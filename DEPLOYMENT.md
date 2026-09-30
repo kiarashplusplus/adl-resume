@@ -49,8 +49,13 @@ longer read and can be deleted.
 
 ## 4. Build and deploy the site
 
-Pushing to `main` triggers the Cloudflare Pages Git build (`npm run build`, output `dist`).
-Manual alternative: `npm run build && npx wrangler pages deploy dist`.
+The `25x-codes` Pages project has no Git integration, so pushing to `main` does not deploy. Deploy from an up-to-date `main`:
+
+```sh
+npm run build && npx wrangler pages deploy dist --project-name 25x-codes --branch main
+```
+
+The contact mailer Worker deploys separately: `npx wrangler deploy -c workers/contact-mailer/wrangler.jsonc`.
 
 ## Verify
 
